@@ -1,8 +1,26 @@
-# Welcome to your Expo app 👋
+# Organisr
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+(idk put some images here)
 
-## Get started
+## Concept
+Organisr is an elegant way to take notes for storage. It would be extremely useful for those with a lot of items, specifically small ones. The app allows users to create 'boxes' which represent real life storage containers and add their items. Then, when they want to search for a specific item, they can use the search function to find the location of the item.
+
+## Functions/To Add
+Basic functions
+   - create boxes and add items [ ]
+   - search [ ]
+
+<br>
+
+Expanding functions
+   - advanced settings like images and expiry date, etc [ ]
+   - visual to differenciate boxes (eg, boxes with more items are more blue) [ ]
+   - image search, if possible [ ]
+   - siri integration (how??) [ ]
+   - themes [ ]
+
+## Developement
+After you fork and clone the repository... (from original README)
 
 1. Install dependencies
 
@@ -23,28 +41,15 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Credits
+We've used many resources from the internet to create this project. Here's a list of them!
 
-## Get a fresh project
+### Fonts
 
-When you're ready, run:
+### Tools
+- [svg to jsx](https://react-svgr.com/playground/?native=true)
 
-```bash
-npm run reset-project
-```
+<br>
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Huge thanks to [Hack Club](https://hackclub.com) and the [Cider](https://cider.hackclub.com) team </3

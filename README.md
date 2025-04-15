@@ -6,18 +6,21 @@
 Organisr is an elegant way to take notes for storage. It would be extremely useful for those with a lot of items, specifically small ones. The app allows users to create 'boxes' which represent real life storage containers and add their items. Then, when they want to search for a specific item, they can use the search function to find the location of the item.
 
 ## Functions/To Add
-Basic functions
-   - create boxes and add items [ ]
-   - search [ ]
+
+### Basic functions
+
+- [ ] create boxes and add items
+- [ ] search
 
 <br>
 
-Expanding functions
-   - advanced settings like images and expiry date, etc [ ]
-   - visual to differenciate boxes (eg, boxes with more items are more blue) [ ]
-   - image search, if possible [ ]
-   - siri integration (how??) [ ]
-   - themes [ ]
+### Expanding functions
+
+- [ ] advanced settings like images and expiry date, etc
+- [ ] visual to differenciate boxes (eg, boxes with more items are more blue)
+- [ ] image search, if possible
+- [ ] siri integration (how??)
+- [ ] themes
 
 ## Developement
 After you fork and clone the repository... (from original README)
@@ -50,6 +53,7 @@ We've used many resources from the internet to create this project. Here's a lis
 - [svg to jsx](https://react-svgr.com/playground/?native=true)
 
 <br>
+
 ---
 
 Huge thanks to [Hack Club](https://hackclub.com) and the [Cider](https://cider.hackclub.com) team </3

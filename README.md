@@ -26,8 +26,8 @@ I thought that it would be really useful to have an app dedicated to storage, it
 
 - [ ] home
 - [ ] search
-- [ ] add box/item
-- [ ] settings/themes
+- [ ] new box/item
+- [ ] themes
 
 <br>
 
@@ -65,8 +65,8 @@ In the output, you'll find options to open the app in a
 We've used many resources from the internet to create this project. Here's a list of them!
 
 ### Fonts
-- Digital Disco by [link]()
-- Pixellari by [link]()
+- Digital Disco by [jeti](https://fontenddev.com/fonts/digital-disco/)
+- Pixellari by [Zacchary Dempsey-Plante](https://www.dafont.com/pixellari.font)
 
 ### Tools
 - Vscode

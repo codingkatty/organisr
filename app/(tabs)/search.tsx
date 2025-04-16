@@ -4,12 +4,14 @@ import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/SearchBar';
 import { BoxItem } from '@/components/BoxItem';
 
-export default function HomeScreen() {
+/* search bar, frequent searches, search for items */
+
+export default function SearchScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title" style={{ fontFamily: "DigitalDisco" }}>Home</ThemedText>
-        <SearchBar icon={true} />
+        <ThemedText type="title" style={{ fontFamily: "DigitalDisco" }}>Search</ThemedText>
+        <SearchBar width="100%" icon={false} />
       </ThemedView>
 
       <ScrollView>

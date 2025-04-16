@@ -10,17 +10,16 @@ interface BoxItemProps {
     borderColor?: string;
 }
 
-const pixelBorderSvgUrl = "data:image/svg+xml," + encodeURIComponent('<svg width="6" height="6" xmlns="http://www.w3.org/2000/svg"><path d="M0 2h2v2H0zM2 0h2v2H2zM4 2h2v2H4zM2 4h2v2H2z" fill="#cccccc"/></svg>');
+const pixelBorderSvgUrl = "data:image/svg+xml," + encodeURIComponent('<svg width="6" height="6" xmlns="http://www.w3.org/2000/svg"><path d="M0 2h2v2H0zM2 0h2v2H2zM4 2h2v2H4zM2 4h2v2H2z" fill="#2b096b"/></svg>');
 
 const Container = styled.View`
-    background-color: #ffffff;
+    background-color:rgba(255, 255, 255, 0);
     border-style: solid;
     border-width: 6px;
     border-image-slice: 2;
-    border-color: #cccccc;
     display: inline-block;
     position: relative;
-    padding: 15px 30px;
+    padding: 0;
     margin: 0;
     border-image-source: url('${pixelBorderSvgUrl}');
     text-align: center;
@@ -39,11 +38,13 @@ const Shadow = styled.View`
 `;
 
 const Name = styled(ThemedText)`
-    font-size: 18px;
+    font-family: 'Pixellari';
+    font-size: 20px;
     font-weight: bold;
 `;
 
 const Description = styled(ThemedText)`
+    font-family: 'Pixellari';
     font-size: 16px;
     color: #666;
 `;
@@ -56,13 +57,25 @@ export function BoxItem({ name, description }: BoxItemProps) {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            position: 'relative'
+            position: 'relative',
         }}>
             <Container>
-                <Name>{name}</Name><br />
-                <Description>{description}</Description>
+                <View style={{
+                    backgroundColor: 'transparent',
+                    padding: 0,
+                    width: '100%',
+                }}>
+                    <View style={{
+                        backgroundColor: 'white',
+                        padding: 15,
+                        width: '100%',
+                    }}>
+                        <Name>{name}</Name>
+                        <Description>{description}</Description>
+                    </View>
+                </View>
+                <Shadow />
             </Container>
-            <Shadow />
         </View>
     );
 }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Searchbar } from 'react-native-paper';
 import { ThemedView } from '@/components/ThemedView';
 import { FilterIcon, NewIcon } from './MyIcons'
+import { useTheme } from '@/components/ThemeSet';
 
 interface SearchBarProps {
     width?: number | `${number}%`;
@@ -10,6 +11,7 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
+    const { themeColors } = useTheme();
     const [searchQuery, setSearchQuery] = useState('');
     const onChangeSearch = (query: string) => setSearchQuery(query);
 
@@ -19,7 +21,7 @@ export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
                 placeholder="Search"
                 onChangeText={onChangeSearch}
                 value={searchQuery}
-                style={[styles.searchBar, { width }]}
+                style={[styles.searchBar, { width, backgroundColor: themeColors.search }]}
                 inputStyle={{ fontFamily: 'Pixellari', fontSize: 20 }}
             />
             {icon && (
@@ -29,8 +31,8 @@ export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
                         position: 'absolute',
                         right: 0
                     }}>
-                    <FilterIcon style={styles.icon} />
-                    <NewIcon style={styles.icon} />
+                    <FilterIcon style={styles.icon} color={themeColors.main} />
+                    <NewIcon style={styles.icon} color={themeColors.main} />
                 </ThemedView>
             )}
         </ThemedView>
@@ -42,6 +44,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         width: '100%',
+        marginBottom: 20
     },
     searchBar: {
         fontFamily: 'Pixellari',
@@ -49,7 +52,6 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         marginRight: 20,
         borderRadius: 0,
-        backgroundColor: '#ebe5f8',
         alignSelf: 'flex-start'
     },
     icon: {

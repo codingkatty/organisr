@@ -1,20 +1,26 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import TextInputExample from '@/components/TextInput';
+import { themes } from '@/utils/themes';
+import { ThemeSelector } from '@/components/ThemeColor';
 import { useTheme } from '@/components/ThemeSet';
 
-export default function AddScreen() {
+export default function ThemeScreen() {
     const { themeColors } = useTheme();
     return (
-        <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
+        <ThemedView style={[
+            styles.container,
+            { backgroundColor: themeColors.main }
+        ]}>
             <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title" style={{ fontFamily: "DigitalDisco", marginTop: 30 }}>New Item</ThemedText>
+                <ThemedText type="title" style={{ fontFamily: "DigitalDisco", marginTop: 50 }}>Themes</ThemedText>
             </ThemedView>
 
             <ScrollView>
                 <ThemedView style={styles.boxContainer}>
-                    <TextInputExample />
+                    {Object.entries(themes).map((theme) => (
+                        <ThemeSelector key={theme[0]} theme={theme[0] as 'purple' | 'blue' | 'pink' | 'yellow'} color={theme[1].main} />
+                    ))}
                 </ThemedView>
             </ScrollView>
         </ThemedView>
@@ -27,19 +33,20 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         paddingHorizontal: '8%',
-        height: 90
+        height: 100,
     },
     boxContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         padding: '2%',
+        paddingHorizontal: '16%',
         maxWidth: 1200,
         width: '100%',
         alignSelf: 'center',
         marginHorizontal: 'auto',
         marginVertical: 16,
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
     },
     boxWrapper: {
         width: '45%',

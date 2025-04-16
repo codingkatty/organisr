@@ -27,7 +27,7 @@ I thought that it would be really useful to have an app dedicated to storage, it
 - [ ] home
 - [ ] search
 - [ ] new box/item
-- [ ] themes
+- [x] themes
 
 <br>
 
@@ -37,7 +37,7 @@ I thought that it would be really useful to have an app dedicated to storage, it
 - [ ] visual to differenciate boxes (eg, boxes with more items are more blue)
 - [ ] image search, if possible
 - [ ] siri integration (how??)
-- [ ] themes
+- [x] themes
 
 ## Developement
 After you fork and clone the repository... (from original README)
@@ -60,6 +60,8 @@ In the output, you'll find options to open the app in a
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+> Web will not work, as some functions cannot be used. If you encounter issues opening project in Expo Go, use `npx expo start --tunnel` instead.
 
 ## Credits
 We've used many resources from the internet to create this project. Here's a list of them!

@@ -3,20 +3,43 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/SearchBar';
 import { BoxItem } from '@/components/BoxItem';
+import { useState, useEffect } from 'react';
+import { useTheme } from '@/components/ThemeSet';
+
+import { init, getBoxes } from '@/utils/filesys';
 
 export default function HomeScreen() {
+  const { themeColors } = useTheme();
+  interface Box {
+    name: string;
+    desc: string;
+  }
+  const [boxes, setBoxes] = useState<Box[] | null>(null);
+
+  useEffect(() => {
+    const initializeData = async () => {
+      await init();
+      const boxesData = await getBoxes();
+      setBoxes(boxesData || null);
+    };
+    initializeData();
+  }, []);
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title" style={{ fontFamily: "DigitalDisco" }}>Home</ThemedText>
+        <ThemedText type="title" style={{ fontFamily: "DigitalDisco", marginVertical: 20 }}>Home</ThemedText>
         <SearchBar icon={true} />
       </ThemedView>
 
       <ScrollView>
         <ThemedView style={styles.boxContainer}>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 1" description="Description 1" />
-          </View>
+          {boxes && boxes.map((box, index) => (
+            <View key={index} style={styles.boxWrapper}>
+              <BoxItem name={box.name} description={box.desc} />
+            </View>
+          ))}
+          
           <View style={styles.boxWrapper}>
             <BoxItem name="Test 2" description="Description 2" />
           </View>
@@ -38,12 +61,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D0B7FF'
   },
   titleContainer: {
-    paddingTop: 28,
-    paddingVertical: 12,
+    paddingTop: 20,
+    paddingVertical: 20,
     paddingHorizontal: '8%',
+    height: 180,
   },
   boxContainer: {
     flexDirection: 'row',
@@ -55,7 +78,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginHorizontal: 'auto',
     marginVertical: 16,
-    backgroundColor: '#D0B7FF'
+    backgroundColor: 'transparent'
   },
   boxWrapper: {
     width: '45%',

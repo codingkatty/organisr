@@ -5,15 +5,17 @@ import { Platform, View } from 'react-native';
 import { HapticTab } from '@/components/HapticTab';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 
-import { HomeIcon, SearchIcon, AddIcon } from '@/components/MyIcons';
+import { HomeIcon, SearchIcon, NewIcon, ThemeIcon } from '@/components/MyIcons';
+import { useTheme } from '@/components/ThemeSet';
 
 export default function TabLayout() {
+  const { themeColors } = useTheme();
   const iconsize = 40;
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#D0B7FF",
+        tabBarActiveTintColor: themeColors.main,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -29,7 +31,7 @@ export default function TabLayout() {
           },
           default: {
             borderTopWidth: 0,
-            height: 70,
+            height: 80,
           },
         }),
       }}>
@@ -79,7 +81,24 @@ export default function TabLayout() {
               width: '100%',
               height: '100%',
             }}>
-              <AddIcon width={iconsize} height={iconsize} color={color} />
+              <NewIcon width={iconsize} height={iconsize} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen 
+        name="themes"
+        options={{
+          title: 'Theme',
+          tabBarIcon: ({ color }) => (
+            <View style={{ 
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+            }}>
+              <ThemeIcon width={iconsize} height={iconsize} color={color} />
             </View>
           ),
         }}

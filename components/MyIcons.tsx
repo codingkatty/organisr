@@ -1,6 +1,7 @@
 import * as React from "react"
 import Svg, { Path, SvgProps } from "react-native-svg"
 import { View } from "react-native"
+import { useTheme } from "@/components/ThemeSet"
 
 const FilterIcon = (props: SvgProps) => {
   return (
@@ -85,7 +86,7 @@ const SearchIcon = (props: SvgProps) => {
 const AddIcon = (props: SvgProps) => {
   const { width = 40, height = 40, color = "#D0B7FF", style, ...otherProps } = props;
   return (
-    <View>
+    <View style={{ width: Number(width), height: Number(height) }}>
       <Svg
         width="100%"
         height="100%"
@@ -104,4 +105,28 @@ const AddIcon = (props: SvgProps) => {
   )
 }
 
-export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon };
+const ThemeIcon = (props: SvgProps) => {
+  const { width = 40, height = 40, color = "#D0B7FF", style, ...otherProps } = props;
+  return (
+    <View style={{ width: Number(width), height: Number(height) }}>
+      <Svg
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 100 100"
+        {...otherProps}
+      >
+        <Path
+          fill={color}
+          d="M30 10h10v10H30zM20 20h10v10H20zM10 30h10v10H10zM10 40h10v10H10zM10 50h10v10H10zM20 60h10v10H20zM40 60h10v10H40zM40 70h10v10H40zM50 80h10v10H50zM60 80h10v10H60zM70 80h10v10H70zM80 70h10v10H80zM80 60h10v10H80zM80 50h10v10H80zM40 10h10v10H40zM50 10h10v10H50zM60 10h10v10H60zM70 20h10v10H70zM80 30h10v10H80zM80 40h10v10H80zM50 30h10v10H50zM50 40h10v10H50zM60 40h10v10H60zM60 50h10v10H60zM50 50h10v10H50zM40 30h10v10H40z"
+        />
+        <Path
+          fill={color}
+          d="M75 75h10v10H75zM25 15h10v10H25zM25 55h20v10H25zM65 15h10v10H65zM75 25h10v10H75z"
+        />
+      </Svg>
+    </View>
+  )
+}
+
+export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon };

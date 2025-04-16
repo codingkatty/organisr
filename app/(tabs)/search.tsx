@@ -3,14 +3,15 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/SearchBar';
 import { BoxItem } from '@/components/BoxItem';
+import { useTheme } from '@/components/ThemeSet';
 
 /* search bar, frequent searches, search for items */
 
 export default function SearchScreen() {
+  const { themeColors } = useTheme();
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title" style={{ fontFamily: "DigitalDisco" }}>Search</ThemedText>
         <SearchBar width="100%" icon={false} />
       </ThemedView>
 
@@ -40,12 +41,12 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D0B7FF'
   },
   titleContainer: {
-    paddingTop: 28,
-    paddingVertical: 12,
+    paddingTop: 50,
+    paddingVertical: 20,
     paddingHorizontal: '8%',
+    height: 140,
   },
   boxContainer: {
     flexDirection: 'row',
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginHorizontal: 'auto',
     marginVertical: 16,
-    backgroundColor: '#D0B7FF'
+    backgroundColor: 'transparent'
   },
   boxWrapper: {
     width: '45%',

@@ -17,3 +17,9 @@ candy's small scribble
     nah i'm probably not doin it
     progress 6h/40h
     react native is confusing TvT
+
+- 16/4 todo
+    fix stuff
+    add boxes
+    filter
+    orient lock

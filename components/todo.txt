@@ -1,0 +1,19 @@
+candy's small scribble
+- icons:
+    home
+    search
+    add
+    settings
+
+- currently fixing:
+    home aesthetics
+    navbar
+    search bar color and font
+    fonts
+    file system, to store data
+
+- goals (cider):
+    10 hours a day, somehow
+    nah i'm probably not doin it
+    progress 6h/40h
+    react native is confusing TvT

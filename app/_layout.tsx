@@ -5,9 +5,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { ThemeProvider } from '@/components/ThemeSet'; // Import your custom ThemeProvider
+import { ThemeProvider } from '@/components/ThemeSet';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,6 +21,12 @@ export default function RootLayout() {
     Pixellari: require('../assets/fonts/Pixellari.ttf'),
   });
 
+  ScreenOrientation.unlockAsync();
+  async function changeScreenOrientation() {
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+  }
+  changeScreenOrientation();
+
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -29,6 +36,7 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
 
   return (
     <ThemeProvider>

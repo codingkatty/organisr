@@ -1,12 +1,11 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { ScrollView, StyleSheet, View, Text, useColorScheme } from 'react-native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/SearchBar';
 import { BoxItem } from '@/components/BoxItem';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@/components/ThemeSet';
-
-import { init, getBoxes } from '@/utils/filesys';
+import { deleteData, init, getBoxes } from '@/utils/filesys';
 
 export default function HomeScreen() {
   const { themeColors } = useTheme();
@@ -28,7 +27,7 @@ export default function HomeScreen() {
   return (
     <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title" style={{ fontFamily: "DigitalDisco", marginVertical: 20 }}>Home</ThemedText>
+        <Text style={{ fontFamily: "DigitalDisco", marginVertical: 20, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>Home</Text>
         <SearchBar icon={true} />
       </ThemedView>
 

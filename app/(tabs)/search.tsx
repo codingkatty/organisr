@@ -1,14 +1,27 @@
+import { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/SearchBar';
-import { BoxItem } from '@/components/BoxItem';
+import { Item } from '@/components/ItemList';
 import { useTheme } from '@/components/ThemeSet';
+import { getAllItems } from '@/utils/filesys';
 
 /* search bar, frequent searches, search for items */
 
 export default function SearchScreen() {
   const { themeColors } = useTheme();
+  interface Item {
+    name: string;
+  }
+  const [items, setItems] = useState<Item[] | null>(null);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const itemsData = await getAllItems();
+      setItems(itemsData || null);
+    };
+    fetchItems();
+  }, []);
   return (
     <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
       <ThemedView style={styles.titleContainer}>
@@ -17,20 +30,13 @@ export default function SearchScreen() {
 
       <ScrollView>
         <ThemedView style={styles.boxContainer}>
+          {items && items.map((item, index) => (
+            <View key={index} style={styles.boxWrapper}>
+              <Item name={item.name} />
+            </View>
+          ))}
           <View style={styles.boxWrapper}>
-            <BoxItem name="Test 1" description="Description 1" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 2" description="Description 2" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 3" description="Description 3" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 4" description="Description 4" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 5" description="Description 5" />
+            <Item name="Test" />
           </View>
         </ThemedView>
       </ScrollView>
@@ -49,24 +55,19 @@ const styles = StyleSheet.create({
     height: 140,
   },
   boxContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
     padding: '2%',
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
     marginHorizontal: 'auto',
     marginVertical: 16,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   boxWrapper: {
-    width: '45%',
     marginHorizontal: '2.5%',
     marginBottom: 16,
     alignItems: 'center',
     justifyContent: 'center',
     display: 'flex',
-    maxWidth: 400,
   },
 });

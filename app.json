@@ -7,6 +7,8 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "orientation": "portrait",
+    "githubUrl": "https://github.com/codingkatty/organisr",
     "ios": {
       "supportsTablet": true,
       "requiresFullScreen": true

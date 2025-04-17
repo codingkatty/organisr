@@ -1,5 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { ScrollView, StyleSheet, View, Text, useColorScheme } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { themes } from '@/utils/themes';
 import { ThemeSelector } from '@/components/ThemeColor';
@@ -13,7 +12,7 @@ export default function ThemeScreen() {
             { backgroundColor: themeColors.main }
         ]}>
             <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title" style={{ fontFamily: "DigitalDisco", marginTop: 50 }}>Themes</ThemedText>
+                <Text style={{ fontFamily: "DigitalDisco", marginTop: 50, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>Themes</Text>
             </ThemedView>
 
             <ScrollView>
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         paddingHorizontal: '8%',
-        height: 100,
+        height: 110,
     },
     boxContainer: {
         flexDirection: 'row',

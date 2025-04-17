@@ -20,12 +20,20 @@ export default function RootLayout() {
     DigitalDisco: require('../assets/fonts/DigitalDisco.ttf'),
     Pixellari: require('../assets/fonts/Pixellari.ttf'),
   });
-
-  ScreenOrientation.unlockAsync();
-  async function changeScreenOrientation() {
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-  }
-  changeScreenOrientation();
+  
+  // workkk
+  useEffect(() => {
+    async function lockOrientation() {
+      try {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        console.log('portrait!');
+      } catch (error) {
+        console.error('error:', error);
+      }
+    }
+    
+    lockOrientation();
+  }, []);
 
   useEffect(() => {
     if (loaded) {

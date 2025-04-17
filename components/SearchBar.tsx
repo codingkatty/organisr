@@ -1,22 +1,27 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Pressable, View } from 'react-native';
 import { useState } from 'react';
 import { Searchbar } from 'react-native-paper';
-import { ThemedView } from '@/components/ThemedView';
 import { FilterIcon, NewIcon } from './MyIcons'
 import { useTheme } from '@/components/ThemeSet';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+    add: undefined;
+};
 
 interface SearchBarProps {
     width?: number | `${number}%`;
     icon: boolean;
 }
-
 export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { themeColors } = useTheme();
     const [searchQuery, setSearchQuery] = useState('');
     const onChangeSearch = (query: string) => setSearchQuery(query);
 
     return (
-        <ThemedView style={styles.container}>
+        <View style={styles.container}>
             <Searchbar
                 placeholder="Search"
                 onChangeText={onChangeSearch}
@@ -25,17 +30,20 @@ export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
                 inputStyle={{ fontFamily: 'Pixellari', fontSize: 20 }}
             />
             {icon && (
-                <ThemedView
+                <View
                     style={{
                         flexDirection: 'row',
                         position: 'absolute',
                         right: 0
                     }}>
                     <FilterIcon style={styles.icon} color={themeColors.main} />
-                    <NewIcon style={styles.icon} color={themeColors.main} />
-                </ThemedView>
+                    <Pressable
+                        onPress={() => navigation.navigate('add')}>
+                        <NewIcon style={styles.icon} color={themeColors.main} />
+                    </Pressable>
+                </View>
             )}
-        </ThemedView>
+        </View>
     );
 }
 
@@ -55,6 +63,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start'
     },
     icon: {
+        backgroundColor: 'transparent',
         alignSelf: 'flex-end'
     }
 })

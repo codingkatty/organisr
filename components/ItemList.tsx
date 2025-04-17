@@ -4,42 +4,37 @@ import { useTheme } from '@/components/ThemeSet';
 
 interface BoxItemProps {
     name: string;
-    description: string;
     backgroundColor?: string;
 }
 
-export function BoxItem({ name, description, backgroundColor }: BoxItemProps) {
+export function Item({ name, backgroundColor }: BoxItemProps) {
     const { themeColors } = useTheme();
     return (
-        <View style={{
+        <View style={[styles.container, {
             backgroundColor: backgroundColor || '#ffffff',
-            paddingHorizontal: 40,
-            paddingVertical: 20,
+            borderColor: themeColors.dark,
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             position: 'relative',
-            marginHorizontal: 5,
-            marginVertical: 5,
-            borderColor: themeColors.dark,
-            borderWidth: 6,
-        }}>
+        }]}>
             <Text style={styles.name}>{name}</Text>
-            <Text style={styles.desc}>{description}</Text>
         </View>
     );
 }
 
 const styles = {
-    container: {},
+    container: {
+        paddingHorizontal: 40,
+        paddingVertical: 20,
+        marginHorizontal: 5,
+        marginVertical: 5,
+        borderWidth: 6,
+    },
     name: {
         fontFamily: 'Pixellari',
-        fontSize: 23,
+        fontSize: 26,
         marginBottom: 8,
-    },
-    desc: {
-        fontFamily: 'Pixellari',
-        fontSize: 16,
-    },
+    }
 }

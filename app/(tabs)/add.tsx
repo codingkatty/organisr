@@ -1,51 +1,60 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ScrollView, Text, StyleSheet, View, Button, Pressable } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { ScrollView, Text, StyleSheet, View, Button, Pressable, useColorScheme } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
-import TextInputExample from '@/components/TextInput';
+import {FormInput, FormSelect, FormMulti} from '@/components/TextInput';
 import { useTheme } from '@/components/ThemeSet';
 
 const Stack = createNativeStackNavigator();
 
 type RootStackParamList = {
     Menu: undefined;
-    SubPage1: undefined;
-    SubPage2: undefined;
+    NewBox: undefined;
+    NewItem: undefined;
 };
 
 type MenuProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'Menu'>;
 };
 
-const Menu = ({ navigation, route }: any) => {
-    const theme = route.params.theme.main;
+const Menu = ({ navigation }: any) => {
+    const { themeColors } = useTheme();
     return (
-        <View style={[styles.menu, { backgroundColor: theme }]}>
-            <Pressable onPress={() => navigation.navigate('NewBox')} style={styles.button}>
-                <Text>New Box</Text>
+        <View style={[styles.menu, { backgroundColor: themeColors.main }]}>
+            <Pressable onPress={() => navigation.navigate('NewBox')} style={[styles.button, { borderColor: themeColors.dark }]}>
+                <Text style={styles.buttonText}>New Box</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('NewItem')} style={styles.button}>
-                <Text>New Item</Text>
+            <Pressable onPress={() => navigation.navigate('NewItem')} style={[styles.button, { borderColor: themeColors.dark, backgroundColor: themeColors.search }]}>
+                <Text style={styles.buttonText}>New Item</Text>
             </Pressable>
         </View>
     );
 }
 
-const NewBox = ({ navigation }: MenuProps) => {
+const NewBox = ({ navigation }: any) => {
+    const { themeColors } = useTheme();
     return (
-        <View style={styles.sub}>
-            <ThemedText style={{ fontSize: 24 }}>Subpage 1</ThemedText>
-            <Button title="Go Back" onPress={() => navigation.goBack()} />
-        </View>
+        <ScrollView style={[styles.form, { backgroundColor: themeColors.main }]}>
+            <Pressable onPress={() => navigation.goBack()} style={styles.back}>
+                <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
+            </Pressable>
+            <View style={{ gap: 20 }}>
+                <FormInput label={'Name'} placeholder={'4mm screwdriver'} width={3} required={true} />
+                <View style={{ flexDirection: 'row', gap: 20 }}>
+                    <FormInput label={'Description'} placeholder={'4mm screwdriver'} width={2} required={true} />
+                    <FormInput label={'Description'} placeholder={'4mm screwdriver'} width={0.91} />
+                </View>
+                <FormSelect />
+                <FormMulti />
+            </View>
+        </ScrollView>
     );
 }
 
 const NewItem = ({ navigation }: MenuProps) => {
     return (
         <View style={styles.sub}>
-            <ThemedText style={{ fontSize: 24 }}>Subpage 2</ThemedText>
+            <Text style={{ fontSize: 24 }}>Subpage 2</Text>
             <Button title="Go Back" onPress={() => navigation.goBack()} />
         </View>
     );
@@ -56,13 +65,13 @@ export default function AddScreen() {
     return (
         <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
             <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title" style={{ fontFamily: "DigitalDisco", marginTop: 50 }}>New Item</ThemedText>
+                <Text style={{ fontFamily: "DigitalDisco", marginTop: 50, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>Add Item/Box</Text>
             </ThemedView>
             <Stack.Navigator
                 screenOptions={{
                     "headerShown": false,
             }}>
-                <Stack.Screen name="Menu" component={Menu} initialParams={{ theme: themeColors }} />
+                <Stack.Screen name="Menu" component={Menu} />
                 <Stack.Screen name="NewBox" component={NewBox} />
                 <Stack.Screen name="NewItem" component={NewItem} />
             </Stack.Navigator>
@@ -76,12 +85,22 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         paddingHorizontal: '8%',
-        height: 100
+        height: 110
     },
     menu: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    form: {
+        flex: 1,
+        padding: 30,
+    },
+    back: {
+        marginVertical: 20,
+        padding: 12,
+        backgroundColor: '#ffffff',
+        width: 100
     },
     sub: {
         flex: 1,
@@ -90,20 +109,15 @@ const styles = StyleSheet.create({
     },
     button: {
         marginVertical: 20,
-        padding: 20,
+        padding: 30,
         backgroundColor: '#ffffff',
-        width: 300,
-        borderRadius: 10,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        width: 350,
+        borderWidth: 6,
     },
     buttonText: {
-        fontSize: 20,
+        fontFamily: 'Pixellari',
+        fontSize: 30,
         textAlign: 'center',
-        color: '#000000',
-        fontWeight: 'bold',
+        color: '#000000'
     }
 });

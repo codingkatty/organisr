@@ -20,6 +20,17 @@ name, desc
 info: catagory/label, color, expiry date, owner, loaned, weight, custom, etc
 */
 
+// deletes files for testing
+export const deleteData = async () => {
+    try {
+        await FileSystem.deleteAsync(uri + "data.json", { idempotent: true });
+        await FileSystem.deleteAsync(uri + "boxes", { idempotent: true });
+    } catch (e) {
+        console.error("error:", e);
+    }
+};
+
+// default
 export const init = async () => {
     // if directory not there
     if (!(await FileSystem.getInfoAsync(uri + "/boxes")).exists) {
@@ -47,13 +58,23 @@ export const init = async () => {
                     data: {
                         name: "Starter Box",
                         desc: "Check out this example box!",
-                        info: {}
+                        info: {
+                            "id": 1000
+                        }
                     },
                 })
             );
             await FileSystem.makeDirectoryAsync(uri + "boxes/starter_box/items", {
                 intermediates: true,
             });
+            await FileSystem.writeAsStringAsync(
+                uri + "boxes/starter_box/items/item1.json",
+                JSON.stringify({
+                    data: {
+                        name: "an item"
+                    },
+                })
+            );
         } catch (e) {
             console.error("error:", e);
         }
@@ -85,15 +106,40 @@ export const getBoxes = async () => {
     }
 };
 
-export const getItems = async (box) => {
+// gets items of a box from box id
+export const getItems = async (boxId) => {
     try {
-        // check for info name instead
         for (const boxdata of await FileSystem.readDirectoryAsync(uri + "boxes")) {
-            const info = await FileSystem.readAsStringAsync(
-                uri + "boxes/" + box + "/info.json"
-            );
+            try {
+                const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
+                const boxInfo = JSON.parse(info).data;
+                if (boxInfo.info.id === boxId) {
+                    const items = await FileSystem.readDirectoryAsync(uri + "boxes/" + boxdata + "/items");
+                    const itemData = await Promise.all(
+                        items.map(async (item) => {
+                            const itemInfo = await FileSystem.readAsStringAsync(
+                                uri + "boxes/" + boxdata + "/items/" + item
+                            );
+                            return JSON.parse(itemInfo).data;
+                        })
+                    );
+                    return itemData;
+                }
+            } catch (e) {
+                console.error(`error at box ${boxdata}:`, e);
+            }
+        }
+    } catch (e) {
+        console.error("error:", e);
+    }
+};
 
-            if (JSON.parse(info).data.name === boxdata) {
+// list of all items for search
+export const getAllItems = async () => {
+    try {
+        const boxes = await FileSystem.readDirectoryAsync(uri + "boxes");
+        const allItems = await Promise.all(
+            boxes.map(async (box) => {
                 const items = await FileSystem.readDirectoryAsync(
                     uri + "boxes/" + box + "/items"
                 );
@@ -106,13 +152,15 @@ export const getItems = async (box) => {
                     })
                 );
                 return itemData;
-            }
-        }
+            })
+        );
+        return allItems.flat();
     } catch (e) {
         console.error("error:", e);
     }
 };
 
+// create box, wip
 export const createBox = async (name, desc) => {
     const boxName = name
         .replace(/[^a-zA-Z0-9 ]/g, "")
@@ -125,13 +173,24 @@ export const createBox = async (name, desc) => {
         await FileSystem.makeDirectoryAsync(uri + "boxes/" + boxName + "/items", {
             intermediates: true,
         });
+        const boxes = await getBoxes();
+        const existingIds = boxes.map(box => box.info.id).filter(id => id);
+        
+        let newId;
+        do {
+            newId = Math.floor(1000 + Math.random() * 9000);
+        } while (existingIds.includes(newId));
+
         await FileSystem.writeAsStringAsync(
             uri + "boxes/" + boxName + "/info.json",
             JSON.stringify({
-                data: {
-                    name: name,
-                    desc: desc,
-                },
+            data: {
+            name: name,
+            desc: desc,
+            info: {
+                id: newId
+            }
+            },
             })
         );
     } catch (e) {
@@ -139,6 +198,7 @@ export const createBox = async (name, desc) => {
     }
 };
 
+// new items
 export const createItem = async (box, itemname, itemdata = []) => {
     const itemName =
         "item" +

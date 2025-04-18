@@ -28,6 +28,7 @@ I thought that it would be really useful to have an app dedicated to storage, it
 - [ ] search
 - [ ] new box/item
 - [x] themes
+- [ ] info page (box/item)
 
 <br>
 

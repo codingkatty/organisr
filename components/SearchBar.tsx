@@ -5,6 +5,8 @@ import { FilterIcon, NewIcon } from './MyIcons'
 import { useTheme } from '@/components/ThemeSet';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { deleteData } from '@/utils/filesys';
+import { BoxEvents } from '@/utils/events';
 
 type RootStackParamList = {
     add: undefined;
@@ -36,11 +38,14 @@ export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
                         position: 'absolute',
                         right: 0
                     }}>
-                    <FilterIcon style={styles.icon} color={themeColors.main} />
-                    <Pressable
-                        onPress={() => navigation.navigate('add')}>
-                        <NewIcon style={styles.icon} color={themeColors.main} />
-                    </Pressable>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Pressable onPress={() => [deleteData(), BoxEvents.emitBoxesChanged()]}>
+                            <FilterIcon style={styles.icon} color={themeColors.main} />
+                        </Pressable>
+                        <Pressable onPress={() => navigation.navigate('add')}>
+                            <NewIcon style={styles.icon} color={themeColors.main} />
+                        </Pressable>
+                    </View>
                 </View>
             )}
         </View>

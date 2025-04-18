@@ -129,4 +129,54 @@ const ThemeIcon = (props: SvgProps) => {
   )
 }
 
-export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon };
+const EditIcon = (props: SvgProps) => {
+  const { width = 40, height = 40, color = "#D087FF", style, ...otherProps } = props;
+  return (
+    <View style={{ width: Number(width), height: Number(height) }}>
+      <Svg
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 100 100"
+        {...otherProps}
+      >
+        <Path
+          fill={color}
+          d="M60 10h10v10H60zM40 60h10v10H40zM35 70h35v10H35zM60 60h10v10H60zM45 30h10v20H45zM50 10h10v20H50zM70 10h10v30H70zM40 50h10v10H40zM20 10h20v10H20zM65 40h10v20H65z"
+        />
+        <Path
+          fill={color}
+          d="M30 75h20v10H30zM90 10h10v90H90zM20 90h70v10H20zM10 10h10v90H10z"
+        />
+      </Svg>
+    </View>
+  )
+}
+
+const DeleteIcon = (props: SvgProps) => {
+  const { width = 40, height = 40, color = "#D087FF", style, ...otherProps } = props;
+  return (
+    <View style={{ width: Number(width), height: Number(height) }}>
+      <Svg
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 100 100"
+        {...otherProps}
+      >
+        <Path
+          fill={color}
+          d="M30 20h10v10H30zM35 45h5v20h-5zM70 45h5v20h-5zM40 60h5v30h-5zM65 60h5v30h-5zM90 35h10v35H90zM15 65h10v10H15z"
+        />
+        <Path fill={color} d="M85 65h10v10H85z" />
+        <Path
+          fill={color}
+          d="M80 70h10v20H80zM20 90h70v10H20zM20 70h10v20H20zM10 35h10v35H10zM70 20h10v10H70zM30 10h50v10H30z"
+        />
+        <Path fill={color} d="M10 25h90v15H10z" />
+      </Svg>
+    </View>
+  )
+}
+
+export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon, EditIcon, DeleteIcon };

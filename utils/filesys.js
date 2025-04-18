@@ -18,6 +18,36 @@ ideas on info
 box/info.json
 name, desc
 info: catagory/label, color, expiry date, owner, loaned, weight, custom, etc
+
+slight idea of what to do (wip)
+box/info.json
+{
+    name: "name",
+    desc: "desc",
+    photo: true,
+    info: {
+        id: "1000", <- 4 number id (unique)
+        catag: ['tools', 'cleaning', 'stationery'], (for filter function)
+        color: "#ffffff", <- color picker?
+        remarks: ""
+    }
+}
+
+form fields: name*, desc*, catag(?), color, remarks, photo
+
+*************************************
+item1.json
+{
+    name: "name",
+    data: {
+        expiryDate: "", <- uhh not sure yet about the format..
+        status: "lended to bob", <- remarks (prob)
+        weight: "3.5g", <- maybe useful
+        customField: ["dimensions", "3.5cmx3.5cmx3.5cm"]
+    }
+}
+
+form fields: name*, expiryDate, status, weight, customField
 */
 
 // deletes files for testing
@@ -91,9 +121,16 @@ export const getBoxes = async () => {
                     const info = await FileSystem.readAsStringAsync(
                         uri + "boxes/" + box + "/info.json"
                     );
-                    return JSON.parse(info).data;
+                    const boxData = JSON.parse(info).data;
+                    return {
+                        name: boxData.name,
+                        desc: boxData.desc,
+                        info: {
+                            id: (boxData.info?.id || '').toString()
+                        }
+                    };
                 } catch (e) {
-                    console.error(`Error reading box ${box}:`, e);
+                    console.error(`error at ${box}:`, e);
                     return null;
                 }
             })
@@ -105,6 +142,24 @@ export const getBoxes = async () => {
         return [];
     }
 };
+
+export const getBoxData = async (boxId) => {
+    try {
+        for (const boxdata of await FileSystem.readDirectoryAsync(uri + "boxes")) {
+            try {
+                const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
+                const boxInfo = JSON.parse(info).data;
+                if (boxInfo.info.id === boxId) {
+                    return boxInfo;
+                }
+            } catch (e) {
+                console.error(`error at box ${boxdata}:`, e);
+            }
+        }
+    } catch (e) {
+        console.error("error:", e);
+    }
+}
 
 // gets items of a box from box id
 export const getItems = async (boxId) => {
@@ -188,7 +243,7 @@ export const createBox = async (name, desc) => {
             name: name,
             desc: desc,
             info: {
-                id: newId
+                id: newId.toString()
             }
             },
             })
@@ -198,13 +253,9 @@ export const createBox = async (name, desc) => {
     }
 };
 
-// new items
-export const createItem = async (box, itemname, itemdata = []) => {
-    const itemName =
-        "item" +
-        (await FileSystem.readDirectoryAsync(uri + "boxes/" + box + "/items")
-            .length) +
-        1;
+// new items, (in box folder not based on id)
+export const createItem = async (box, itemname, itemdata = {}) => {
+    const itemName = "item" + (await FileSystem.readDirectoryAsync(uri + "boxes/" + box + "/items").length) + 1;
     try {
         await FileSystem.writeAsStringAsync(
             uri + "boxes/" + box + "/items/" + itemName + ".json",

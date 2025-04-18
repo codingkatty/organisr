@@ -5,9 +5,10 @@ import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 
 interface FormInputProps {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   width: number;
   required?: boolean;
+  slctdata?: Promise<Array<{name: string, info: { id: string }}>>;
 }
 
 const FormInput = ({ label, placeholder, width, required }: FormInputProps) => {
@@ -44,15 +45,33 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
-const FormSelect = () => {
+const FormSelect = ({ label, required, slctdata }: FormInputProps) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [dropdownData, setDropdownData] = useState(data);
   const { themeColors } = useTheme();
+
+  const fetchData = async () => {
+    if (slctdata) {
+      const data = await slctdata;
+      setDropdownData(data.map(item => ({ label: item.name, value: item.info.id })));
+      console.log(data);
+    }
+  };
+  React.useEffect(() => {
+    fetchData();
+  }, [slctdata]);
 
   const renderLabel = () => {
     return (
       <Text style={[styles.label, isFocus && { color: themeColors.dark }]}>
-        Select Box
+        {required ? (
+          <>
+            {label}<Text style={styles.required}>*</Text>
+          </>
+        ) : (
+          label
+        )}
       </Text>
     );
   };
@@ -66,7 +85,7 @@ const FormSelect = () => {
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         itemTextStyle={styles.itemTextStyle}
-        data={data}
+        data={dropdownData || data}
         search
         maxHeight={300}
         labelField="label"

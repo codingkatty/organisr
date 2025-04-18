@@ -2,8 +2,10 @@ import React from 'react';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScrollView, Text, StyleSheet, View, Button, Pressable, useColorScheme } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
-import {FormInput, FormSelect, FormMulti} from '@/components/TextInput';
+import { FormInput, FormSelect, FormMulti } from '@/components/TextInput';
 import { useTheme } from '@/components/ThemeSet';
+import { getBoxes } from '@/utils/filesys';
+import { ColorPick } from '@/components/ColorPicker';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,24 +41,35 @@ const NewBox = ({ navigation }: any) => {
                 <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
             </Pressable>
             <View style={{ gap: 20 }}>
-                <FormInput label={'Name'} placeholder={'4mm screwdriver'} width={3} required={true} />
+                <FormInput label={'Name of Box'} placeholder={'my blue box'} width={3} required={true} />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Description'} placeholder={'4mm screwdriver'} width={2} required={true} />
+                    <FormInput label={'Description/Location'} placeholder={'3rd rack in garage'} width={2} required={true} />
                     <FormInput label={'Description'} placeholder={'4mm screwdriver'} width={0.91} />
                 </View>
-                <FormSelect />
                 <FormMulti />
+                <ColorPick />
             </View>
         </ScrollView>
     );
 }
 
 const NewItem = ({ navigation }: MenuProps) => {
+    const { themeColors } = useTheme();
     return (
-        <View style={styles.sub}>
-            <Text style={{ fontSize: 24 }}>Subpage 2</Text>
-            <Button title="Go Back" onPress={() => navigation.goBack()} />
-        </View>
+        <ScrollView style={[styles.form, { backgroundColor: themeColors.main }]}>
+            <Pressable onPress={() => navigation.goBack()} style={styles.back}>
+                <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
+            </Pressable>
+            <View style={{ gap: 20 }}>
+                <FormInput label={'Name of Item'} placeholder={'4mm screwdriver'} width={3} required={true} />
+                <View style={{ flexDirection: 'row', gap: 20 }}>
+                    <FormInput label={'Description'} placeholder={'sunny yellow, for assembling robot'} width={2} required={true} />
+                    <FormInput label={'Status'} placeholder={'lended to bob!'} width={0.91} />
+                </View>
+                <FormSelect label="Select a box" required={true} width={3} slctdata={getBoxes()} />
+                <FormMulti />
+            </View>
+        </ScrollView>
     );
 }
 

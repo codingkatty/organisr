@@ -1,11 +1,11 @@
 import { ScrollView, StyleSheet, View, Text, useColorScheme } from 'react-native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/SearchBar';
 import { BoxItem } from '@/components/BoxItem';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@/components/ThemeSet';
-import { deleteData, init, getBoxes } from '@/utils/filesys';
+import { init, getBoxes } from '@/utils/filesys';
+import { BoxEvents } from '@/utils/events';
 
 export default function HomeScreen() {
   const { themeColors } = useTheme();
@@ -22,7 +22,18 @@ export default function HomeScreen() {
       setBoxes(boxesData || null);
     };
     initializeData();
+
+    const unsubscribe = BoxEvents.onBoxesChanged(refreshBoxes);
+    return () => {
+      unsubscribe();
+    };
   }, []);
+
+  const refreshBoxes = async () => {
+    await init(); // test only
+    const boxesData = await getBoxes();
+    setBoxes(boxesData || null);
+  };
 
   return (
     <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>

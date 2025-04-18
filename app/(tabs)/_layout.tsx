@@ -103,6 +103,12 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen 
+        name="box/[id]"
+        options={{
+          href: null
+        }}
+      />
     </Tabs>
   );
 }

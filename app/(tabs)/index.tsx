@@ -12,6 +12,9 @@ export default function HomeScreen() {
   interface Box {
     name: string;
     desc: string;
+    info: {
+      id: string;
+    };
   }
   const [boxes, setBoxes] = useState<Box[] | null>(null);
 
@@ -46,7 +49,7 @@ export default function HomeScreen() {
         <ThemedView style={styles.boxContainer}>
           {boxes && boxes.map((box, index) => (
             <View key={index} style={styles.boxWrapper}>
-              <BoxItem name={box.name} description={box.desc} />
+              <BoxItem name={box.name} description={box.desc} boxId={box.info.id} />
             </View>
           ))}
           

@@ -14,25 +14,25 @@ export function BoxItem({ name, description, backgroundColor, boxId }: BoxItemPr
     const { themeColors } = useTheme();
     const router = useRouter();
     return (
-        <Pressable onPress={() => router.navigate(`./box/${boxId}`)}>
-            <View style={{
-                backgroundColor: backgroundColor || '#ffffff',
-                paddingHorizontal: 40,
-                paddingVertical: 20,
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                position: 'relative',
-                marginHorizontal: 5,
-                marginVertical: 5,
-                borderColor: themeColors.dark,
-                borderWidth: 6,
-            }}>
+        <View style={{
+            backgroundColor: backgroundColor || '#ffffff',
+            paddingHorizontal: 40,
+            paddingVertical: 20,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            position: 'relative',
+            marginHorizontal: 5,
+            marginVertical: 5,
+            borderColor: themeColors.dark,
+            borderWidth: 6,
+        }}>
+            <Pressable onPress={() => router.navigate(`./box/${boxId}`)}>
                 <Text style={styles.name}>{name}</Text>
                 <Text style={styles.desc}>{description}</Text>
-            </View>
-        </Pressable>
+            </Pressable>
+        </View>
     );
 }
 

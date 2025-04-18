@@ -6,6 +6,8 @@ import { FormInput, FormSelect, FormMulti } from '@/components/TextInput';
 import { useTheme } from '@/components/ThemeSet';
 import { getBoxes } from '@/utils/filesys';
 import { ColorPick } from '@/components/ColorPicker';
+import { ImagePick } from '@/components/ImagePicker';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,20 +38,28 @@ const Menu = ({ navigation }: any) => {
 const NewBox = ({ navigation }: any) => {
     const { themeColors } = useTheme();
     return (
+        <ActionSheetProvider>
         <ScrollView style={[styles.form, { backgroundColor: themeColors.main }]}>
             <Pressable onPress={() => navigation.goBack()} style={styles.back}>
                 <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
             </Pressable>
-            <View style={{ gap: 20 }}>
-                <FormInput label={'Name of Box'} placeholder={'my blue box'} width={3} required={true} />
+            <View style={{ gap: 20, marginBottom: 100 }}>
+                <FormInput label={'Name of Box'} placeholder={'blue flower box'} width={3} required={true} />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Description/Location'} placeholder={'3rd rack in garage'} width={2} required={true} />
-                    <FormInput label={'Description'} placeholder={'4mm screwdriver'} width={0.91} />
+                    <FormInput label={'Description/Location'} placeholder={'3rd shelf in garage'} width={2} required={true} />
+                    <FormInput label={'Remarks'} placeholder={'for picnic'} width={0.9} />
                 </View>
                 <FormMulti />
-                <ColorPick />
+                <ImagePick />
+                <View style={{ flexDirection: 'row', gap: 20 }}>
+                    <ColorPick />
+                    <Pressable style={styles.submit}>
+                        <Text style={styles.submitText}>Submit</Text>
+                    </Pressable>
+                </View>
             </View>
         </ScrollView>
+        </ActionSheetProvider>
     );
 }
 
@@ -60,14 +70,13 @@ const NewItem = ({ navigation }: MenuProps) => {
             <Pressable onPress={() => navigation.goBack()} style={styles.back}>
                 <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
             </Pressable>
-            <View style={{ gap: 20 }}>
+            <View style={{ gap: 20, marginBottom: 100 }}>
                 <FormInput label={'Name of Item'} placeholder={'4mm screwdriver'} width={3} required={true} />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Description'} placeholder={'sunny yellow, for assembling robot'} width={2} required={true} />
-                    <FormInput label={'Status'} placeholder={'lended to bob!'} width={0.91} />
+                    <FormInput label={'Status'} placeholder={'new, lended to bob'} width={2} required={true} />
+                    <FormInput label={'Date (Any)'} placeholder={'MM/DD/YY'} width={0.9} />
                 </View>
                 <FormSelect label="Select a box" required={true} width={3} slctdata={getBoxes()} />
-                <FormMulti />
             </View>
         </ScrollView>
     );
@@ -132,5 +141,17 @@ const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
         color: '#000000'
+    },
+    submit: {
+        marginVertical: 30,
+        padding: 12,
+        backgroundColor: '#1a1e66',
+        width: 110,
+        height: 60
+    },
+    submitText: {
+        fontFamily: 'Pixellari',
+        fontSize: 26,
+        color: '#ffffff'
     }
 });

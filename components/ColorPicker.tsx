@@ -21,8 +21,6 @@ export const ColorPick = () => {
                         <Swatches colors={["#d00000", "#ff9a26", "#f2f223", "#46da32", "#72d3f6", "#b459ed"]} />
                     </View>
                 </View>
-
-
             </ColorPicker>
         </View>
     );
@@ -35,6 +33,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     field: {
+        width: 450,
         height: 60,
         flexDirection: 'row',
         backgroundColor: 'white',

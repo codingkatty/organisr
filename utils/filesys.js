@@ -24,7 +24,7 @@ box/info.json
 {
     name: "name",
     desc: "desc",
-    photo: true,
+    photo: true, ah well needs some..thinking
     info: {
         id: "1000", <- 4 number id (unique)
         catag: ['tools', 'cleaning', 'stationery'], (for filter function)
@@ -149,7 +149,7 @@ export const getBoxData = async (boxId) => {
             try {
                 const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
                 const boxInfo = JSON.parse(info).data;
-                if (boxInfo.info.id === boxId) {
+                if (boxInfo.info.id == boxId) {
                     return boxInfo;
                 }
             } catch (e) {
@@ -253,20 +253,36 @@ export const createBox = async (name, desc) => {
     }
 };
 
-// new items, (in box folder not based on id)
-export const createItem = async (box, itemname, itemdata = {}) => {
-    const itemName = "item" + (await FileSystem.readDirectoryAsync(uri + "boxes/" + box + "/items").length) + 1;
+// new items
+export const createItem = async (boxId, itemname, itemdata = {}) => {
     try {
-        await FileSystem.writeAsStringAsync(
-            uri + "boxes/" + box + "/items/" + itemName + ".json",
-            JSON.stringify({
-                data: {
-                    name: itemname,
-                    data: itemdata,
-                },
-            })
-        );
-        return itemName;
+        for (const boxdata of await FileSystem.readDirectoryAsync(uri + "boxes")) {
+            try {
+                const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
+                const boxInfo = JSON.parse(info).data;
+                if (boxInfo.info.id === boxId) {
+                    const items = await FileSystem.readDirectoryAsync(uri + "boxes/" + boxdata + "/items");
+                    const itemName = "item" + (items.length + 1) + ".json";
+
+                    try {
+                        await FileSystem.writeAsStringAsync(
+                            uri + "boxes/" + boxdata + "/items/" + itemName,
+                            JSON.stringify({
+                                data: {
+                                    name: itemname,
+                                    data: itemdata
+                                },
+                            })
+                        );
+                        return itemName;
+                    } catch (e) {
+                        console.error("error:", e);
+                    }
+                }
+            } catch (e) {
+                console.error(`error at box ${boxdata}:`, e);
+            }
+        }
     } catch (e) {
         console.error("error:", e);
     }

@@ -40,6 +40,13 @@
         {
           "initialOrientation": "PORTRAIT_UP"
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "This app accesses your photos to let you choose images for your notes.",
+          "cameraPermission": "This app accesses your camera to let you take pictures for your notes."
+        }
       ]
     ],
     "experiments": {

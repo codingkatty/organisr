@@ -52,19 +52,6 @@ export default function HomeScreen() {
               <BoxItem name={box.name} description={box.desc} boxId={box.info.id} />
             </View>
           ))}
-          
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 2" description="Description 2" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 3" description="Description 3" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 4" description="Description 4" />
-          </View>
-          <View style={styles.boxWrapper}>
-            <BoxItem name="Test 5" description="Description 5" />
-          </View>
         </ThemedView>
       </ScrollView>
     </ThemedView>

@@ -9,9 +9,11 @@ interface FormInputProps {
   width: number;
   required?: boolean;
   slctdata?: Promise<Array<{name: string, info: { id: string }}>>;
+  value?: string;
+  onChange?: (text: string) => void;
 }
 
-const FormInput = ({ label, placeholder, width, required }: FormInputProps) => {
+const FormInput = ({ label, placeholder, width, required, value, onChange }: FormInputProps) => {
   const { themeColors } = useTheme();
 
   return (
@@ -29,6 +31,8 @@ const FormInput = ({ label, placeholder, width, required }: FormInputProps) => {
         style={[styles.input, { backgroundColor: themeColors.search }]}
         placeholder={placeholder}
         placeholderTextColor="#aaaaaa"
+        value={value}
+        onChangeText={onChange}
       />
     </View>
   );
@@ -104,15 +108,35 @@ const FormSelect = ({ label, required, slctdata }: FormInputProps) => {
   )
 }
 
-const FormMulti = () => {
-  const [selected, setSelected] = useState<string[]>([]);
+interface FormMultiProps extends Omit<FormInputProps, 'value' | 'onChange' | 'width'> {
+  width?: number;
+  value?: string[];
+  onChange?: (values: string[]) => void;
+}
+
+const FormMulti = ({ label, width, value = [], onChange }: FormMultiProps) => {
   const [isFocus, setIsFocus] = useState(false);
   const { themeColors } = useTheme();
+
+  const categories = [
+    { label: 'Tools', value: 'tools' },
+    { label: 'Food', value: 'food' },
+    { label: 'Cleaning', value: 'cleaning' },
+    { label: 'Leisure', value: 'leisure' },
+    { label: 'Travel', value: 'travel' },
+    { label: 'Hobby', value: 'hobby' },
+    { label: 'Sports', value: 'sports' },
+    { label: 'Decoration', value: 'decoration' },
+    { label: 'Work', value: 'work' },
+    { label: 'School', value: 'school' },
+    { label: 'Clothing', value: 'clothing' },
+    { label: 'Stationery', value: 'stationery' },
+  ];
 
   const renderLabel = () => {
     return (
       <Text style={[styles.label, isFocus && { color: themeColors.dark }]}>
-        Select Catagory
+        {label}
       </Text>
     );
   };
@@ -129,16 +153,16 @@ const FormMulti = () => {
         iconStyle={styles.iconStyle}
         itemTextStyle={styles.itemTextStyle}
         search
-        data={data}
+        data={categories}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? 'Select item' : '...'}
+        placeholder={!isFocus ? 'Select categories' : '...'}
         searchPlaceholder="Search..."
-        value={selected}
+        value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setSelected(item);
+        onChange={items => {
+          onChange?.(items);
           setIsFocus(false);
         }}
       />

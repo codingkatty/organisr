@@ -48,6 +48,7 @@ item1.json
 }
 
 form fields: name*, expiryDate, status, weight, customField
+catagories: tools, food, cleaning, leisure, travel, hobby, sports, decoration, work, school, clothing, books, micc, containers, electrical, components, small items, snack, device, seeds, soil, stationery, luggage, bags, plastic, instruments
 */
 
 // deletes files for testing
@@ -150,6 +151,7 @@ export const getBoxData = async (boxId) => {
                 const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
                 const boxInfo = JSON.parse(info).data;
                 if (boxInfo.info.id == boxId) {
+                    console.log(boxInfo)
                     return boxInfo;
                 }
             } catch (e) {
@@ -216,42 +218,102 @@ export const getAllItems = async () => {
 };
 
 // create box, wip
-export const createBox = async (name, desc) => {
+export const createBox = async (name, desc, catag, color, remarks, imageUri) => {
     const boxName = name
         .replace(/[^a-zA-Z0-9 ]/g, "")
         .replace(/ /g, "_")
-        .toLowerCase(); // no spaces or special chars
+        .toLowerCase();
+    
     try {
-        await FileSystem.makeDirectoryAsync(uri + "boxes/" + boxName, {
-            intermediates: true,
-        });
-        await FileSystem.makeDirectoryAsync(uri + "boxes/" + boxName + "/items", {
-            intermediates: true,
-        });
+        // id then box directory
         const boxes = await getBoxes();
         const existingIds = boxes.map(box => box.info.id).filter(id => id);
+
+        // prevent same folder
+        let finalBoxName = boxName;
+        let counter = 1;
+        while (await FileSystem.getInfoAsync(uri + "boxes/" + finalBoxName).then(info => info.exists)) {
+            finalBoxName = `${boxName}${counter}`;
+            counter++;
+        }
         
         let newId;
         do {
             newId = Math.floor(1000 + Math.random() * 9000);
         } while (existingIds.includes(newId));
 
-        await FileSystem.writeAsStringAsync(
-            uri + "boxes/" + boxName + "/info.json",
-            JSON.stringify({
-            data: {
-            name: name,
-            desc: desc,
-            info: {
-                id: newId.toString()
+        await FileSystem.makeDirectoryAsync(uri + "boxes/" + finalBoxName, {
+            intermediates: true,
+        });
+
+        await FileSystem.makeDirectoryAsync(uri + "boxes/" + finalBoxName + "/items", {
+            intermediates: true,
+        });
+
+        let imagePath = null;
+        if (imageUri && typeof imageUri === "string") {
+            imagePath = "photo.jpg";
+            try {
+                await FileSystem.copyAsync({
+                    from: imageUri,
+                    to: uri + "boxes/" + finalBoxName + "/photo.jpg",
+                });
+            } catch (e) {
+                console.error("error:", e);
             }
-            },
+        }
+
+        await FileSystem.writeAsStringAsync(
+            uri + "boxes/" + finalBoxName + "/info.json",
+            JSON.stringify({
+                data: {
+                    name: name,
+                    desc: desc,
+                    image: imagePath,
+                    info: {
+                        id: newId.toString(),
+                        catag: catag,
+                        color: color,
+                        remarks: remarks
+                    }
+                }
             })
         );
+        
+        return newId.toString();
     } catch (e) {
         console.error("error:", e);
+        return null;
     }
 };
+
+export const getBoxImage = async (boxId) => {
+    try {
+        for (const boxdata of await FileSystem.readDirectoryAsync(uri + "boxes")) {
+            try {
+                const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
+                const boxInfo = JSON.parse(info).data;
+                
+                if (boxInfo.info.id === boxId) {
+                    if (boxInfo.image) {
+                        const imagePath = uri + "boxes/" + boxdata + "/" + boxInfo.image;
+                        const fileInfo = await FileSystem.getInfoAsync(imagePath);
+                        if (fileInfo.exists) {
+                            return imagePath;
+                        }
+                    }
+                    return null;
+                }
+            } catch (e) {
+                console.error(`error at box ${boxdata}:`, e);
+            }
+        }
+        return null;
+    } catch (e) {
+        console.error("error:", e);
+        return null;
+    }
+}
 
 // new items
 export const createItem = async (boxId, itemname, itemdata = {}) => {

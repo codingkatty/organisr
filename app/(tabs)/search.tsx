@@ -5,6 +5,7 @@ import SearchBar from '@/components/SearchBar';
 import { Item } from '@/components/ItemList';
 import { useTheme } from '@/components/ThemeSet';
 import { getAllItems } from '@/utils/filesys';
+import { Collapsible } from '@/components/Collapsible'
 
 /* search bar, frequent searches, search for items */
 
@@ -29,16 +30,21 @@ export default function SearchScreen() {
       </ThemedView>
 
       <ScrollView>
-        <ThemedView style={styles.boxContainer}>
-          {items && items.map((item, index) => (
-            <View key={index} style={styles.boxWrapper}>
-              <Item name={item.name} />
-            </View>
-          ))}
-          <View style={styles.boxWrapper}>
-            <Item name="Test" />
+        <View style={{ marginBottom: 100 }}>
+          <View style={{
+            margin: 30
+          }}>
+            <Collapsible children={
+            <ThemedView style={styles.boxContainer}>
+              {items && items.map((item, index) => (
+                <View key={index} style={styles.boxWrapper}>
+                  <Item name={item.name} />
+                </View>
+              ))}
+            </ThemedView>
+          } title="Items (1)" />
           </View>
-        </ThemedView>
+        </View>
       </ScrollView>
     </ThemedView>
   );

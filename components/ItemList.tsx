@@ -27,10 +27,10 @@ export function Item({ name, backgroundColor }: BoxItemProps) {
 const styles = {
     container: {
         paddingHorizontal: 40,
-        paddingVertical: 20,
+        paddingVertical: 18,
         marginHorizontal: 5,
         marginVertical: 5,
-        borderWidth: 6,
+        borderWidth: 4,
     },
     name: {
         fontFamily: 'Pixellari',

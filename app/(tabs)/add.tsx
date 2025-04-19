@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScrollView, Text, StyleSheet, View, Button, Pressable, useColorScheme } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { FormInput, FormSelect, FormMulti } from '@/components/TextInput';
 import { useTheme } from '@/components/ThemeSet';
-import { getBoxes } from '@/utils/filesys';
+import { getBoxes, createBox } from '@/utils/filesys';
 import { ColorPick } from '@/components/ColorPicker';
 import { ImagePick } from '@/components/ImagePicker';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { BoxEvents } from '@/utils/events';
+import { router } from 'expo-router';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +39,42 @@ const Menu = ({ navigation }: any) => {
 
 const NewBox = ({ navigation }: any) => {
     const { themeColors } = useTheme();
+    const [boxData, setBoxData] = useState({
+        name: '',
+        desc: '',
+        remarks: '',
+        categories: [],
+        color: '#d00000',
+        image: ''
+    })
+
+    const updateField = (field: string, value: any) => {
+        setBoxData((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleSubmit = async () => {
+        if (!boxData.name || !boxData.desc) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        try {
+            const newBoxId = await createBox(
+                boxData.name,
+                boxData.desc,
+                boxData.categories,
+                boxData.color,
+                boxData.remarks,
+                boxData.image
+            );
+
+            BoxEvents.emitBoxesChanged();
+            navigation.goBack();
+            router.push(`/box/${newBoxId}`);
+        } catch (e) {
+            console.error('error:', e);
+        }
+    }
     return (
         <ActionSheetProvider>
         <ScrollView style={[styles.form, { backgroundColor: themeColors.main }]}>
@@ -44,16 +82,46 @@ const NewBox = ({ navigation }: any) => {
                 <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
             </Pressable>
             <View style={{ gap: 20, marginBottom: 100 }}>
-                <FormInput label={'Name of Box'} placeholder={'blue flower box'} width={3} required={true} />
+                <FormInput 
+                    label={'Name of Box'} 
+                    placeholder={'blue flower box'} 
+                    width={3} 
+                    required={true}
+                    value={boxData.name}
+                    onChange={(text) => updateField('name', text)}
+                />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Description/Location'} placeholder={'3rd shelf in garage'} width={2} required={true} />
-                    <FormInput label={'Remarks'} placeholder={'for picnic'} width={0.9} />
+                    <FormInput 
+                        label={'Description/Location'}
+                        placeholder={'3rd shelf in garage'}
+                        width={2}
+                        required={true}
+                        value={boxData.desc}
+                        onChange={(text) => updateField('desc', text)}
+                    />
+                    <FormInput 
+                        label={'Remarks'}
+                        placeholder={'for picnic'}
+                        width={0.9}
+                        value={boxData.remarks}
+                        onChange={(text) => updateField('remarks', text)}
+                    />
                 </View>
-                <FormMulti />
-                <ImagePick />
+                <FormMulti
+                    label={'Select Catagories'}
+                    value={boxData.categories}
+                    onChange={(catag) => updateField('categories', catag)}
+                />
+                <ImagePick
+                    value={boxData.image}
+                    onChange={(image) => updateField('image', image)}
+                />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <ColorPick />
-                    <Pressable style={styles.submit}>
+                    <ColorPick
+                        value={boxData.color}
+                        onChange={(color) => updateField('color', color)}
+                    />
+                    <Pressable style={styles.submit} onPress={handleSubmit}>
                         <Text style={styles.submitText}>Submit</Text>
                     </Pressable>
                 </View>
@@ -71,12 +139,27 @@ const NewItem = ({ navigation }: MenuProps) => {
                 <Text style={{ fontFamily: 'Pixellari', fontSize: 20 }}>Back</Text>
             </Pressable>
             <View style={{ gap: 20, marginBottom: 100 }}>
-                <FormInput label={'Name of Item'} placeholder={'4mm screwdriver'} width={3} required={true} />
+                <FormInput
+                    label={'Name of Item'}
+                    placeholder={'4mm screwdriver'}
+                    width={3}
+                    required={true}
+                />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
                     <FormInput label={'Status'} placeholder={'new, lended to bob'} width={2} required={true} />
                     <FormInput label={'Date (Any)'} placeholder={'MM/DD/YY'} width={0.9} />
                 </View>
                 <FormSelect label="Select a box" required={true} width={3} slctdata={getBoxes()} />
+                <View style={{ flexDirection: 'row', gap: 20 }}>
+                    <FormInput label={'Custom Field'} placeholder={'dimensions'} width={2} />
+                    <FormInput label={'Value'} placeholder={'3.5cm'} width={0.9} />
+                </View>
+                <View style={{ flexDirection: 'row', gap: 20 }}>
+                    <FormInput label={'Weight'} placeholder={'300g'} width={1.2} />
+                    <Pressable style={styles.submit}>
+                        <Text style={styles.submitText}>Submit</Text>
+                    </Pressable>
+                </View>
             </View>
         </ScrollView>
     );

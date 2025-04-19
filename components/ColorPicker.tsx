@@ -1,12 +1,20 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import ColorPicker, { Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
 import { useTheme } from '@/components/ThemeSet';
 
-export const ColorPick = () => {
+interface ColorPickProps {
+    value: string;
+    onChange: (color: string) => void;
+}
+
+export const ColorPick = ({ value, onChange }: ColorPickProps) => {
     const { themeColors } = useTheme();
+
     const onSelectColor = ({ hex }: { hex: string }) => {
         'worklet';
         console.log(hex);
+        onChange(hex);
     };
 
     return (

@@ -12,6 +12,22 @@ Whenever I try to find something but its hidden somewhere,... deep and never-to-
 
 I thought that it would be really useful to have an app dedicated to storage, it'd feature more advanced capabilities such as adding images, remarks, AI searching, filters and more. Everything can be put into 'boxes' and moved around to other boxes. For example, there could be a 'box' for the bottom most layer of your snack trolley so you would never miss an expiry date! Or you could also add unused items, so that whenever you want to find them, it would be easy as a small search in the app! Though there are some issues, for example too many items would take a very long time to add (btw users can snap a pic of the box and attach it too >w<), in which I will try my best to improve!
 
+## Pages
+### Home
+The home page consists of a grid like list of all boxes along with a search bar and some buttons. The filter icon allows users to quickly access specific boxes, while the add icon will bring users to the add page.
+
+### Search
+This page has a search bar and returns list of boxes and items from search. They are displayed in a collapsible. It is for easy searching. I will add more advanced functions to assist search in the future!
+
+### Add
+The add page is used to create boxes and add new items. Two buttons navigate to respective forms. It took quite some time though, as it uses more modules like dropdown, images and more.
+
+### Themes
+The themes page can be used to change themes, which I would also add more in the future. Currently, it has 4 themes: purple, blue, pink and yellow. Also the main theme for the whole app is pixel, icons are in svg for easy editing.
+
+### Box Viewer
+This page is not shown in nav bar as it is hidden. It can be opened from home page by clicking on a box! It opens the page containing information of the box as well as a list of items stored in the box. From there, users can edit/delete the box, as well as move items to other boxes.
+
 ## Functions/To Add
 
 ### Basic functions
@@ -34,7 +50,7 @@ I thought that it would be really useful to have an app dedicated to storage, it
 
 ### Expanding functions
 
-- [ ] advanced settings like images and expiry date, etc
+- [x] advanced settings like images and expiry date, etc
 - [ ] visual to differenciate boxes (eg, boxes with more items are more blue)
 - [ ] image search, if possible
 - [ ] siri integration (how??)
@@ -63,6 +79,28 @@ In the output, you'll find options to open the app in a
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
 > Web will not work, as some functions cannot be used. If you encounter issues opening project in Expo Go, use `npx expo start --tunnel` instead.
+
+### reanimated-color-picker
+I messed around and couldn't figure out how to edit some styles for the swatch, so I've edited `style.ts` (starts line 93) in `node_modules\reanimated-color-picker\lib\src`. Code here:
+
+```
+// Swatches
+swatchesContainer: {
+   flexDirection: 'row',
+   flexWrap: 'wrap',
+   justifyContent: 'space-between',
+},
+swatch: {
+   width: 30,
+   height: 30,
+   borderRadius: 5,
+   marginHorizontal: 5,
+   borderStyle: 'solid',
+   borderWidth: 1,
+},
+```
+
+the edted style is to match the overall theme <3
 
 ## Credits
 We've used many resources from the internet to create this project. Here's a list of them!

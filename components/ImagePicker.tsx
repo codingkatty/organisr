@@ -5,7 +5,12 @@ import * as MediaLibrary from 'expo-media-library';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTheme } from '@/components/ThemeSet';
 
-export const ImagePick = () => {
+interface ImagePickProps {
+    value: string;
+    onChange: (uri: string) => void;
+}
+
+export const ImagePick = ({ value, onChange }: ImagePickProps) => {
     const [image, setImage] = useState<string | null>(null);
     const [status, requestPermission] = ImagePicker.useCameraPermissions();
     const { showActionSheetWithOptions } = useActionSheet();
@@ -68,7 +73,13 @@ export const ImagePick = () => {
             }
 
             if (result && !result.canceled) {
-                setImage(result.assets[0].uri);
+                const selectedUri = result.assets[0].uri;
+                setImage(selectedUri);
+                console.log(selectedUri)
+                
+                if (onChange) {
+                    onChange(selectedUri);
+                }
             }
         });
     };

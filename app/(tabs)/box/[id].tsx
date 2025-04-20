@@ -1,20 +1,70 @@
-import { useLocalSearchParams } from 'expo-router';
-import { getBoxData, getBoxImage } from '@/utils/filesys'
-import { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View, Text, useColorScheme, Image } from 'react-native';
+import { useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { getBoxData, getBoxImage, getItems } from '@/utils/filesys'
+import { useState, useCallback } from 'react';
+import { ScrollView, StyleSheet, View, Text, useColorScheme, Image, Pressable } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { useTheme } from '@/components/ThemeSet';
+import { Item } from '@/components/ItemList';
+import { ItemModal } from '@/components/ItemModal';
+import { BoxEvents } from '@/utils/events';
+
+interface ItemData {
+    name: string;
+    data?: any;
+}
+
+interface Item {
+    name: string;
+    data?: any;
+}
 
 export default function BoxScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const [boxData, setBoxData] = useState<any>(null);
     const [image, setImage] = useState<string | null>(null);
+    const [items, setItems] = useState<ItemData[]>([]);
     const { themeColors } = useTheme();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
-    useEffect(() => {
-        getBoxData(id).then(data => setBoxData(data));
-        getBoxImage(id).then(image => setImage(image || null));
+    const handleItemPress = (item: Item) => {
+        setSelectedItem(item);
+        setModalVisible(true);
+    }
+
+    const loadBoxData = useCallback(async () => {
+        console.log('Loading box data for ID:', id);
+        if (!id) return;
+        
+        try {
+            const data = await getBoxData(id);
+            setBoxData(data);
+            
+            const imageUri = await getBoxImage(id);
+            setImage(imageUri || null);
+            
+            const itemsData = await getItems(id);
+            console.log('Loaded items:', itemsData?.length || 0);
+            setItems(itemsData || []);
+        } catch (error) {
+            console.error('Error loading box data:', error);
+        }
     }, [id]);
+
+    useFocusEffect(
+        useCallback(() => {
+            loadBoxData();
+            
+            const unsubscribe = BoxEvents.onBoxesChanged(() => {
+                console.log('Box changes detected, refreshing data');
+                loadBoxData();
+            });
+            
+            return () => {
+                unsubscribe();
+            };
+        }, [loadBoxData])
+    );
 
     return (
         <ThemedView style={[
@@ -55,7 +105,7 @@ export default function BoxScreen() {
                         }}></View>
                     </View>
                 </View>
-                
+
                 {image ? (
                     <View style={[styles.info, { backgroundColor: themeColors.search }]}>
                         <Text style={styles.h2}>Image</Text>
@@ -63,8 +113,46 @@ export default function BoxScreen() {
                     </View>
                 ) : null}
 
-                <Text>Items (0)</Text>
+                <View style={[styles.info, { backgroundColor: themeColors.search, flexDirection: 'column' }]}>
+                    <Text style={styles.h2}>Items</Text>
+                    <View>
+                        {items.length > 0 ? (
+                            items.map((item) => (
+                                <View style={styles.item}>
+                                    <Item name={item.name} key={item.name} onPress={() => handleItemPress(item)} />
+                                </View>
+                            ))
+                        ) : (
+                            <Text style={{
+                                fontFamily: 'Pixellari',
+                                fontSize: 20,
+                                color: "#a0a0a0",
+                                marginVertical: 10
+                            }}>no items</Text>
+                        )}
+                    </View>
+                </View>
+                
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    marginHorizontal: '5%',
+                }}>
+                    <Pressable style={styles.submit}>
+                        <Text style={styles.submitText}>Edit</Text>
+                    </Pressable>
+                    <Pressable style={[styles.submit, { backgroundColor: '#d00000' }]}>
+                        <Text style={styles.submitText}>Delete</Text>
+                    </Pressable>
+                </View>
             </ScrollView>
+
+            <ItemModal
+                visible={modalVisible}
+                item={selectedItem}
+                onClose={() => setModalVisible(false)}
+                themeColors={themeColors}
+            />
         </ThemedView>
     );
 }
@@ -87,6 +175,12 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 1,
     },
+    item: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        marginHorizontal: '5%',
+    },
     h2: {
         fontFamily: "Pixellari",
         fontSize: 24,
@@ -96,5 +190,18 @@ const styles = StyleSheet.create({
         fontFamily: "Pixellari",
         fontSize: 20,
         paddingLeft: 10,
+    },
+    submit: {
+        marginRight: 20,
+        marginVertical: 30,
+        padding: 12,
+        backgroundColor: '#1a1e66',
+        width: 110,
+        height: 60
+    },
+    submitText: {
+        fontFamily: 'Pixellari',
+        fontSize: 26,
+        color: '#ffffff'
     }
 });

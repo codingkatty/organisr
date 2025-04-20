@@ -4,7 +4,7 @@ import { ScrollView, Text, StyleSheet, View, Button, Pressable, useColorScheme }
 import { ThemedView } from '@/components/ThemedView';
 import { FormInput, FormSelect, FormMulti } from '@/components/TextInput';
 import { useTheme } from '@/components/ThemeSet';
-import { getBoxes, createBox } from '@/utils/filesys';
+import { getBoxes, createBox, createItem } from '@/utils/filesys';
 import { ColorPick } from '@/components/ColorPicker';
 import { ImagePick } from '@/components/ImagePicker';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
@@ -75,6 +75,7 @@ const NewBox = ({ navigation }: any) => {
             console.error('error:', e);
         }
     }
+
     return (
         <ActionSheetProvider>
         <ScrollView style={[styles.form, { backgroundColor: themeColors.main }]}>
@@ -133,6 +134,40 @@ const NewBox = ({ navigation }: any) => {
 
 const NewItem = ({ navigation }: MenuProps) => {
     const { themeColors } = useTheme();
+    const [itemData, setItemData] = useState({
+        name: '',
+        boxId: '',
+        data: {
+            status: '',
+            date: '',
+            custom: ['', '']
+        }
+    })
+
+    const updateField = (field: string, value: any) => {
+        setItemData((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleSubmit = async () => {
+        if (!itemData.name || !itemData.boxId || !itemData.data.status) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        if ((!itemData.data.custom[0] && itemData.data.custom[1]) || (itemData.data.custom[0] && !itemData.data.custom[1])) {
+            alert('Please fill in both custom fields.');
+            return;
+        }
+
+        try {
+            await createItem(itemData.boxId, itemData.name, itemData.data);
+            console.log(itemData.boxId, itemData.name, itemData.data);
+            BoxEvents.emitBoxesChanged();
+            navigation.goBack();
+        } catch (e) {
+            console.error('error:', e);
+        }
+    }
     return (
         <ScrollView style={[styles.form, { backgroundColor: themeColors.main }]}>
             <Pressable onPress={() => navigation.goBack()} style={styles.back}>
@@ -144,19 +179,53 @@ const NewItem = ({ navigation }: MenuProps) => {
                     placeholder={'4mm screwdriver'}
                     width={3}
                     required={true}
+                    value={itemData.name}
+                    onChange={(text) => updateField('name', text)}
                 />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Status'} placeholder={'new, lended to bob'} width={2} required={true} />
-                    <FormInput label={'Date (Any)'} placeholder={'MM/DD/YY'} width={0.9} />
+                    <FormInput 
+                        label={'Status'}
+                        placeholder={'new, lended to bob'}
+                        width={2}
+                        required={true}
+                        value={itemData.data.status}
+                        onChange={(text) => updateField('data', { ...itemData.data, status: text })}
+                    />
+                    <FormInput 
+                        label={'Date (Any)'}
+                        placeholder={'MM/DD/YY'}
+                        width={0.9}
+                        value={itemData.data.date}
+                        onChange={(text) => updateField('data', { ...itemData.data, date: text })}
+                    />
                 </View>
-                <FormSelect label="Select a box" required={true} width={3} slctdata={getBoxes()} />
+                <FormSelect
+                    label="Select a box"
+                    required={true}
+                    width={3}
+                    slctdata={getBoxes()}
+                    value={itemData.boxId}
+                    onChange={(box) => updateField('boxId', box)}
+                />
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Custom Field'} placeholder={'dimensions'} width={2} />
-                    <FormInput label={'Value'} placeholder={'3.5cm'} width={0.9} />
+                    <FormInput
+                        label={'Custom Field'}
+                        placeholder={'dimensions'}
+                        width={2}
+                        value={itemData.data.custom[0]}
+                        onChange={(text) => updateField('data', { ...itemData.data, custom: [text] })}
+                    />
+                    <FormInput
+                        label={'Value'}
+                        placeholder={'3.5cm'}
+                        width={0.9}
+                        value={itemData.data.custom[1]}
+                        onChange={(text) => updateField('data', { ...itemData.data, custom: [itemData.data.custom[0], text] })}
+                    />
                 </View>
                 <View style={{ flexDirection: 'row', gap: 20 }}>
                     <FormInput label={'Weight'} placeholder={'300g'} width={1.2} />
-                    <Pressable style={styles.submit}>
+                    <Pressable style={styles.submit} onPress={handleSubmit}>
                         <Text style={styles.submitText}>Submit</Text>
                     </Pressable>
                 </View>

@@ -15,21 +15,21 @@ type RootStackParamList = {
 interface SearchBarProps {
     width?: number | `${number}%`;
     icon: boolean;
+    value?: string;
+    onChange?: (text: string) => void;
 }
-export default function SearchBar({ width = '65%', icon }: SearchBarProps) {
+export default function SearchBar({ width = '65%', icon, value, onChange }: SearchBarProps) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { themeColors } = useTheme();
-    const [searchQuery, setSearchQuery] = useState('');
-    const onChangeSearch = (query: string) => setSearchQuery(query);
 
     return (
         <View style={styles.container}>
             <Searchbar
                 placeholder="Search"
-                onChangeText={onChangeSearch}
-                value={searchQuery}
                 style={[styles.searchBar, { width, backgroundColor: themeColors.search }]}
                 inputStyle={{ fontFamily: 'Pixellari', fontSize: 20 }}
+                value={value ?? ''}
+                onChangeText={onChange}
             />
             {icon && (
                 <View

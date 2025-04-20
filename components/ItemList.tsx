@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { useTheme } from '@/components/ThemeSet';
 
 interface BoxItemProps {
     name: string;
     backgroundColor?: string;
+    onPress?: () => void;
 }
 
-export function Item({ name, backgroundColor }: BoxItemProps) {
+export function Item({ name, backgroundColor, onPress }: BoxItemProps) {
     const { themeColors } = useTheme();
     return (
         <View style={[styles.container, {
@@ -19,7 +20,11 @@ export function Item({ name, backgroundColor }: BoxItemProps) {
             justifyContent: 'center',
             position: 'relative',
         }]}>
-            <Text style={styles.name}>{name}</Text>
+            <Pressable
+                onPress={onPress}
+            >
+                <Text style={styles.name}>{name}</Text>
+            </Pressable>
         </View>
     );
 }
@@ -28,7 +33,6 @@ const styles = {
     container: {
         paddingHorizontal: 40,
         paddingVertical: 18,
-        marginHorizontal: 5,
         marginVertical: 5,
         borderWidth: 4,
     },
@@ -36,5 +40,5 @@ const styles = {
         fontFamily: 'Pixellari',
         fontSize: 26,
         marginBottom: 8,
-    }
+    },
 }

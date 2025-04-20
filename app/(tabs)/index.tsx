@@ -14,6 +14,7 @@ export default function HomeScreen() {
     desc: string;
     info: {
       id: string;
+      color: string;
     };
   }
   const [boxes, setBoxes] = useState<Box[] | null>(null);
@@ -41,15 +42,16 @@ export default function HomeScreen() {
   return (
     <ThemedView style={[styles.container, { backgroundColor: themeColors.main }]}>
       <ThemedView style={styles.titleContainer}>
-        <Text style={{ fontFamily: "DigitalDisco", marginVertical: 20, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>Home</Text>
-        <SearchBar icon={true} />
+        <Text style={{ fontFamily: "DigitalDisco", marginTop: 50, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>Home</Text>
+        {/*<Text style={{ fontFamily: "DigitalDisco", marginVertical: 20, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>Home</Text>*/}
+        {/*<SearchBar icon={true} />*/}
       </ThemedView>
 
       <ScrollView>
         <ThemedView style={styles.boxContainer}>
           {boxes && boxes.map((box, index) => (
             <View key={index} style={styles.boxWrapper}>
-              <BoxItem name={box.name} description={box.desc} boxId={box.info.id} />
+              <BoxItem name={box.name} description={box.desc} boxId={box.info.id} color={box.info.color} />
             </View>
           ))}
         </ThemedView>
@@ -63,10 +65,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleContainer: {
-    paddingTop: 20,
-    paddingVertical: 20,
+    //paddingTop: 20,
+    //paddingVertical: 20,
     paddingHorizontal: '8%',
-    height: 180,
+    height: 110
+    //height: 180,
   },
   boxContainer: {
     flexDirection: 'row',

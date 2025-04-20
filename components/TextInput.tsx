@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, View, Text } from 'react-native';
 import { useTheme } from '@/components/ThemeSet';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
@@ -49,8 +49,8 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
-const FormSelect = ({ label, required, slctdata }: FormInputProps) => {
-  const [value, setValue] = useState(null);
+const FormSelect = ({ label, required, slctdata, value, onChange }: FormInputProps) => {
+  const [selectedValue, setSelectedValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [dropdownData, setDropdownData] = useState(data);
   const { themeColors } = useTheme();
@@ -59,10 +59,10 @@ const FormSelect = ({ label, required, slctdata }: FormInputProps) => {
     if (slctdata) {
       const data = await slctdata;
       setDropdownData(data.map(item => ({ label: item.name, value: item.info.id })));
-      console.log(data);
     }
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     fetchData();
   }, [slctdata]);
 
@@ -100,7 +100,8 @@ const FormSelect = ({ label, required, slctdata }: FormInputProps) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
-          setValue(item.value);
+          onChange?.(item.value);
+          setSelectedValue(item.value);
           setIsFocus(false);
         }}
       />

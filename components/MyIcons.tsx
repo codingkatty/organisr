@@ -1,7 +1,6 @@
 import * as React from "react"
 import Svg, { Path, SvgProps } from "react-native-svg"
 import { View } from "react-native"
-import { useTheme } from "@/components/ThemeSet"
 
 const FilterIcon = (props: SvgProps) => {
   return (
@@ -179,4 +178,44 @@ const DeleteIcon = (props: SvgProps) => {
   )
 }
 
-export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon, EditIcon, DeleteIcon };
+const CloseIcon = (props: SvgProps) => {
+  const { width = 40, height = 40, color = "#D087FF", style, ...otherProps } = props;
+  return (
+    <View style={{ width: Number(width), height: Number(height) }}>
+      <Svg
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 100 100"
+        {...otherProps}
+      >
+        <Path
+          fill={color}
+          d="M40 40h10v10H40zM30 30h10v10H30zM50 30h10v10H50zM30 50h10v10H30zM50 50h10v10H50zM60 20h10v10H60zM20 20h10v10H20zM20 60h10v10H20zM60 60h10v10H60zM70 10h10v10H70zM10 10h10v10H10zM10 70h10v10H10zM70 70h10v10H70z"
+        />
+      </Svg>
+    </View>
+  )
+}
+
+const CollapseIcon = (props: SvgProps & { rotate?: string }) => {
+  const { width = 40, height = 40, color = "#AAA", style, rotate = "0deg", ...otherProps } = props;
+  return (
+    <View style={{ width: Number(width), height: Number(height), transform: [{ rotate: rotate }] }}>
+      <Svg
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 100 100"
+        {...otherProps}
+      >
+        <Path
+          fill={color}
+          d="M10 30h10v15H10zM40 60h20v10H40zM80 30h10v15H80zM20 40h10v10H20zM70 40h10v10H70zM60 50h15v10H60zM25 50h15v10H25z"
+        />
+      </Svg>
+    </View>
+  )
+}
+
+export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon, EditIcon, DeleteIcon, CloseIcon, CollapseIcon };

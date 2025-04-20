@@ -90,7 +90,9 @@ export const init = async () => {
                         name: "Starter Box",
                         desc: "Check out this example box!",
                         info: {
-                            "id": 1000
+                            "id": 1000,
+                            "color": "#d00000",
+                            "catag": ["tools", "stationery"]
                         }
                     },
                 })
@@ -102,7 +104,13 @@ export const init = async () => {
                 uri + "boxes/starter_box/items/item1.json",
                 JSON.stringify({
                     data: {
-                        name: "an item"
+                        name: "Example item",
+                        data: {
+                            date: "4/20/2025",
+                            status: "Available",
+                            weight: "1kg",
+                            custom: ["Dimensions", "10cm x 10cm x 10cm"],
+                        },
                     },
                 })
             );
@@ -127,7 +135,8 @@ export const getBoxes = async () => {
                         name: boxData.name,
                         desc: boxData.desc,
                         info: {
-                            id: (boxData.info?.id || '').toString()
+                            id: (boxData.info?.id || '').toString(),
+                            color: boxData.info?.color,
                         }
                     };
                 } catch (e) {
@@ -151,7 +160,6 @@ export const getBoxData = async (boxId) => {
                 const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
                 const boxInfo = JSON.parse(info).data;
                 if (boxInfo.info.id == boxId) {
-                    console.log(boxInfo)
                     return boxInfo;
                 }
             } catch (e) {
@@ -170,14 +178,22 @@ export const getItems = async (boxId) => {
             try {
                 const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
                 const boxInfo = JSON.parse(info).data;
-                if (boxInfo.info.id === boxId) {
+                const itemsPath = uri + "boxes/" + boxdata + "/items";
+                console.log(await FileSystem.readDirectoryAsync(itemsPath));
+
+                if (boxInfo.info.id == boxId) {
                     const items = await FileSystem.readDirectoryAsync(uri + "boxes/" + boxdata + "/items");
+
                     const itemData = await Promise.all(
                         items.map(async (item) => {
-                            const itemInfo = await FileSystem.readAsStringAsync(
-                                uri + "boxes/" + boxdata + "/items/" + item
-                            );
-                            return JSON.parse(itemInfo).data;
+                            const itemPath = `${itemsPath}/${item}`;
+                            const itemInfo = await FileSystem.readAsStringAsync(itemPath);
+                            const itemData = JSON.parse(itemInfo).data;
+
+                            return {
+                                name: itemData.name,
+                                data: itemData.data,
+                            };
                         })
                     );
                     return itemData;
@@ -194,26 +210,43 @@ export const getItems = async (boxId) => {
 // list of all items for search
 export const getAllItems = async () => {
     try {
-        const boxes = await FileSystem.readDirectoryAsync(uri + "boxes");
-        const allItems = await Promise.all(
-            boxes.map(async (box) => {
-                const items = await FileSystem.readDirectoryAsync(
-                    uri + "boxes/" + box + "/items"
-                );
-                const itemData = await Promise.all(
-                    items.map(async (item) => {
-                        const itemInfo = await FileSystem.readAsStringAsync(
-                            uri + "boxes/" + box + "/items/" + item
-                        );
-                        return JSON.parse(itemInfo).data;
-                    })
-                );
-                return itemData;
-            })
-        );
-        return allItems.flat();
+        const allItems = [];
+
+        for (const boxdata of await FileSystem.readDirectoryAsync(uri + "boxes")) {
+            const boxInfoPath = uri + "boxes/" + boxdata + "/info.json";
+            const boxInfoData = await FileSystem.readAsStringAsync(boxInfoPath);
+            const boxInfo = JSON.parse(boxInfoData).data;
+            const boxId = boxInfo.info.id;
+
+            const itemsPath = uri + "boxes/" + boxdata + "/items";
+            let items = [];
+            try {
+                items = await FileSystem.readDirectoryAsync(itemsPath);
+            } catch (dirErr) {
+                console.error(`Error reading items directory for box ${boxdata}:`, dirErr);
+                continue;
+            }
+
+            for (const itemFile of items) {
+                const itemPath = `${itemsPath}/${itemFile}`;
+                const itemContent = await FileSystem.readAsStringAsync(itemPath);
+                const parsedItem = JSON.parse(itemContent).data;
+
+                const item = {
+                    boxId: boxId,
+                    name: parsedItem.name,
+                    data: parsedItem.data
+                };
+
+                allItems.push(item);
+            }
+        }
+
+        console.log(`Found ${allItems.length} total items across all boxes`);
+        return allItems;
     } catch (e) {
-        console.error("error:", e);
+        console.error("Error in getAllItems:", e);
+        return [];
     }
 };
 
@@ -223,7 +256,7 @@ export const createBox = async (name, desc, catag, color, remarks, imageUri) => 
         .replace(/[^a-zA-Z0-9 ]/g, "")
         .replace(/ /g, "_")
         .toLowerCase();
-    
+
     try {
         // id then box directory
         const boxes = await getBoxes();
@@ -236,7 +269,7 @@ export const createBox = async (name, desc, catag, color, remarks, imageUri) => 
             finalBoxName = `${boxName}${counter}`;
             counter++;
         }
-        
+
         let newId;
         do {
             newId = Math.floor(1000 + Math.random() * 9000);
@@ -279,7 +312,7 @@ export const createBox = async (name, desc, catag, color, remarks, imageUri) => 
                 }
             })
         );
-        
+
         return newId.toString();
     } catch (e) {
         console.error("error:", e);
@@ -293,7 +326,7 @@ export const getBoxImage = async (boxId) => {
             try {
                 const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
                 const boxInfo = JSON.parse(info).data;
-                
+
                 if (boxInfo.info.id === boxId) {
                     if (boxInfo.image) {
                         const imagePath = uri + "boxes/" + boxdata + "/" + boxInfo.image;
@@ -322,9 +355,10 @@ export const createItem = async (boxId, itemname, itemdata = {}) => {
             try {
                 const info = await FileSystem.readAsStringAsync(uri + "boxes/" + boxdata + "/info.json");
                 const boxInfo = JSON.parse(info).data;
-                if (boxInfo.info.id === boxId) {
-                    const items = await FileSystem.readDirectoryAsync(uri + "boxes/" + boxdata + "/items");
-                    const itemName = "item" + (items.length + 1) + ".json";
+
+                if (boxInfo.info.id == boxId) {
+                    const time = Date.now();
+                    const itemName = `item_${time}`;
 
                     try {
                         await FileSystem.writeAsStringAsync(
@@ -332,7 +366,8 @@ export const createItem = async (boxId, itemname, itemdata = {}) => {
                             JSON.stringify({
                                 data: {
                                     name: itemname,
-                                    data: itemdata
+                                    data: itemdata,
+                                    boxId: boxInfo.info.id
                                 },
                             })
                         );

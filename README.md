@@ -1,6 +1,10 @@
 # Organisr 📦📦📦
 
-(idk put some images here)
+<img src="assets/images/screenshots/home.jpg" height="250px">
+<img src="assets/images/screenshots/new_box.jpg" height="250px">
+<img src="assets/images/screenshots/box.jpg" height="250px">
+<img src="assets/images/screenshots/search.jpg" height="250px">
+<img src="assets/images/screenshots/themes.jpg" height="250px">
 
 ## Concept
 Organisr is an elegant way to take notes for storage. It would be extremely useful for those with a lot of items, specifically small ones. The app allows users to create 'boxes' which represent real life storage containers and add their items. Then, when they want to search for a specific item, they can use the search function to find the location of the item.

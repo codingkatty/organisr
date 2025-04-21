@@ -64,6 +64,13 @@ This page is not shown in nav bar as it is hidden. It can be opened from home pa
 - [ ] siri integration (how??)
 - [x] themes
 
+<br>
+
+### Future additions
+- [ ] filter for easy search
+- [ ] item editing
+- [ ] more fields
+
 ## Developement
 After you fork and clone the repository... (from original README)
 

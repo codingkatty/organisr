@@ -1,10 +1,6 @@
 # Organisr 📦📦📦
 
-<img src="assets/images/screenshots/home.jpg" height="250px">
-<img src="assets/images/screenshots/new_box.jpg" height="250px">
-<img src="assets/images/screenshots/box.jpg" height="250px">
-<img src="assets/images/screenshots/search.jpg" height="250px">
-<img src="assets/images/screenshots/themes.jpg" height="250px">
+<img src="assets/images/screenshots/home.jpg" height="250px"><img src="assets/images/screenshots/new_box.jpg" height="250px"><img src="assets/images/screenshots/box.jpg" height="250px"><img src="assets/images/screenshots/search.jpg" height="250px"><img src="assets/images/screenshots/themes.jpg" height="250px">
 
 ## Concept
 Organisr is an elegant way to take notes for storage. It would be extremely useful for those with a lot of items, specifically small ones. The app allows users to create 'boxes' which represent real life storage containers and add their items. Then, when they want to search for a specific item, they can use the search function to find the location of the item.
@@ -126,12 +122,7 @@ We've used many resources from the internet to create this project. Here's a lis
 ## Icons
 I made some icons using figma for the project, here are some! (home/search/add/theme/close/edit)
 
-<img src="assets/images/home.svg" width="40px">
-<img src="assets/images/search.svg" width="40px">
-<img src="assets/images/add-icon.svg" width="40px">
-<img src="assets/images/theme.svg" width="40px">
-<img src="assets/images/close.svg" width="40px">
-<img src="assets/images/edit.svg" width="40px">
+<img src="assets/images/home.svg" width="40px"><img src="assets/images/search.svg" width="40px"><img src="assets/images/add-icon.svg" width="40px"><img src="assets/images/theme.svg" width="40px"><img src="assets/images/close.svg" width="40px"><img src="assets/images/edit.svg" width="40px">
 
 ### Contact
 if you encounter any bugs or so, please feel free to open an issue or email me at m001720@permatapintar.ukm.edu.my<br>

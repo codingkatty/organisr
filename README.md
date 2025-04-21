@@ -38,7 +38,7 @@ This page is not shown in nav bar as it is hidden. It can be opened from home pa
 
 - [x] create boxes and add items
 - [x] search
-- [ ] move items to other box
+- [x] move items to other box
 
 <br>
 

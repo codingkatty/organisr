@@ -34,7 +34,8 @@ export default function HomeScreen() {
   }, []);
 
   const refreshBoxes = async () => {
-    await init(); // test only
+    await new Promise(resolve => setTimeout(resolve, 500));
+    //await init(); // test only
     const boxesData = await getBoxes();
     setBoxes(boxesData || null);
   };

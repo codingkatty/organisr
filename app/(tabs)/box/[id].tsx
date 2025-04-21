@@ -1,12 +1,13 @@
 import { useLocalSearchParams, useFocusEffect, router } from 'expo-router';
 import { getBoxData, getBoxImage, getItems, deleteBox } from '@/utils/filesys'
 import { useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, View, Text, useColorScheme, Image, Pressable, Alert } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, useColorScheme, Image, Pressable, Alert, Modal } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { useTheme } from '@/components/ThemeSet';
 import { Item } from '@/components/ItemList';
 import { ItemModal } from '@/components/ItemModal';
 import { BoxEvents } from '@/utils/events';
+import { ImageModal } from '@/components/ImageModal';
 
 interface ItemData {
     name: string;
@@ -27,10 +28,15 @@ export default function BoxScreen() {
     const { themeColors } = useTheme();
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+    const [imageModalVisible, setImageModalVisible] = useState(false);
 
     const handleItemPress = (item: Item) => {
         setSelectedItem(item);
         setModalVisible(true);
+    }
+
+    const handleImagePress = () => {
+        setImageModalVisible(true);
     }
 
     const handleDelete = async (id: string) => {
@@ -117,7 +123,9 @@ export default function BoxScreen() {
                 {image ? (
                     <View style={[styles.info, { backgroundColor: themeColors.search }]}>
                         <Text style={styles.h2}>Image</Text>
-                        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+                        <Pressable onPress={() => handleImagePress()}>
+                            <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+                        </Pressable>
                     </View>
                 ) : null}
 
@@ -160,6 +168,12 @@ export default function BoxScreen() {
                 visible={modalVisible}
                 item={selectedItem}
                 onClose={() => setModalVisible(false)}
+                themeColors={themeColors}
+            />
+            <ImageModal
+                visible={imageModalVisible}
+                image={image || ''}
+                onClose={() => setImageModalVisible(false)}
                 themeColors={themeColors}
             />
         </ThemedView>

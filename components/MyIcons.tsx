@@ -218,4 +218,29 @@ const CollapseIcon = (props: SvgProps & { rotate?: string }) => {
   )
 }
 
-export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon, EditIcon, DeleteIcon, CloseIcon, CollapseIcon };
+const PictureIcon = (props: SvgProps) => {
+  const { width = 40, height = 40, color = "#AAAAAA", style, ...otherProps } = props;
+  return (
+    <View style={{ width: Number(width), height: Number(height) }}>
+      <Svg
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 120 100"
+        {...props}
+      >
+        <Path
+          fill={color}
+          d="M10 10h100v10H10zM10 80h100v10H10zM10 20h10v60H10zM100 20h10v60h-10zM20 70h80v10H20zM30 60h25v10H30z"
+        />
+        <Path
+          fill={color}
+          d="M34 54h10v10H34zM30 30h10v10H30zM64 60h36v10H64zM70 50h25v10H70zM75 40h15v10H75z"
+        />
+        <Path fill={color} d="M78 33h10v10H78zM24 65h10v10H24z" />
+      </Svg>
+    </View>
+  )
+}
+
+export { FilterIcon, HomeIcon, SearchIcon, AddIcon, NewIcon, ThemeIcon, EditIcon, DeleteIcon, CloseIcon, CollapseIcon, PictureIcon };

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Pressable, Image, View, StyleSheet, Alert, Text } from 'react-native';
+import { Pressable, Image, View, StyleSheet, Alert, Text, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTheme } from '@/components/ThemeSet';
+import { PictureIcon } from '@/components/MyIcons';
 
 interface ImagePickProps {
     value: string;
-    onChange: (uri: string) => void;
+    onChange: (uri: string | null) => void;
 }
 
 export const ImagePick = ({ value, onChange }: ImagePickProps) => {
@@ -79,7 +80,7 @@ export const ImagePick = ({ value, onChange }: ImagePickProps) => {
             if (result && !result.canceled) {
                 const selectedUri = result.assets[0].uri;
                 setImage(selectedUri);
-                
+
                 if (onChange) {
                     onChange(selectedUri);
                 }
@@ -90,10 +91,31 @@ export const ImagePick = ({ value, onChange }: ImagePickProps) => {
     return (
         <View>
             <Text style={styles.label}>Box Image</Text>
-            <Pressable onPress={pickImage} style={[styles.button, { backgroundColor: themeColors.search }]}>
-                {!image && <Text style={styles.text}>Choose Image</Text>}
-                {image && <Image source={{ uri: value }} style={styles.image} />}
-            </Pressable>
+            <View style={[styles.imageContainer, { backgroundColor: themeColors.search }]}>
+                {value ? (
+                    <View>
+                        <Image
+                            source={{ uri: value }}
+                            style={{ width: 200, height: 200, marginBottom: 10 }}
+                        />
+                        <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
+                            <Pressable onPress={pickImage}>
+                                <Text style={[styles.text, { color: '#3ea8f4' }]}>Change</Text>
+                            </Pressable>
+                            <Pressable onPress={() => onChange(null)}>
+                                <Text style={[styles.text, { color: '#d00000' }]}>Remove</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                ) : (
+                    <Pressable onPress={pickImage} style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <PictureIcon />
+                    </Pressable>
+                )}
+            </View>
         </View>
     );
 }
@@ -119,5 +141,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Pixellari',
         fontSize: 24,
         color: '#aaaaaa'
+    },
+    imageContainer: {
+        padding: 20,
+        borderStyle: 'solid',
+        borderWidth: 1,
     }
 });

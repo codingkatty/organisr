@@ -1,6 +1,9 @@
-import React from 'react';
-import { Modal, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { Modal, View, Text, StyleSheet, Pressable, ScrollView, Alert } from 'react-native';
 import { CloseIcon } from '@/components/MyIcons';
+import { FormSelect } from '@/components/TextInput';
+import { getBoxes, moveItem } from '@/utils/filesys';
+import { BoxEvents } from '@/utils/events';
 
 interface ItemDetailModalProps {
     visible: boolean;
@@ -15,7 +18,22 @@ export const ItemModal: React.FC<ItemDetailModalProps> = ({
     onClose,
     themeColors
 }) => {
+    const [selectedBoxId, setSelectedBoxId] = useState('');
+
     if (!item) return null;
+
+    const handleMoveItem = async () => {
+        if (!selectedBoxId || selectedBoxId === item.data?.boxId) {
+            return;
+        }
+
+        const itemMoveStat = await moveItem(item, selectedBoxId);
+        if (!itemMoveStat) {
+            Alert.alert('Failed', 'Cannot move item to same box.')
+        } else {
+            BoxEvents.emitBoxesChanged();
+        }
+    }
 
     return (
         <Modal
@@ -81,6 +99,29 @@ export const ItemModal: React.FC<ItemDetailModalProps> = ({
                         {(!item.data?.status && !item.data?.date && !item.data?.custom) && (
                             <Text style={styles.noData}>No additional information available</Text>
                         )}
+
+                        <View style={{
+                            borderBottomColor: '#000000',
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                            marginVertical: 20,
+                        }} />
+
+                        <FormSelect
+                            label={'Move Box'}
+                            onChange={(boxId) => setSelectedBoxId(boxId)}
+                            slctdata={getBoxes()}
+                            value={selectedBoxId}
+                            width={200}
+                        />
+
+                        <View style={{ flexDirection: 'row', gap: 20 }}>                      
+                            <Pressable style={styles.submit} onPress={() => { handleMoveItem(); onClose(); }}>
+                                <Text style={styles.submitText}>Move</Text>
+                            </Pressable>
+                            <Pressable style={[styles.submit, { backgroundColor: '#d00000' }]}>
+                                <Text style={styles.submitText}>Delete</Text>
+                            </Pressable>
+                        </View>
                     </ScrollView>
                 </View>
             </View>
@@ -122,5 +163,17 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         textAlign: 'center',
         color: '#aaaaaa',
+    },
+    submit: {
+        marginVertical: 30,
+        padding: 12,
+        backgroundColor: '#1a1e66',
+        width: 110,
+        height: 60
+    },
+    submitText: {
+        fontFamily: 'Pixellari',
+        fontSize: 26,
+        color: '#ffffff'
     }
 });

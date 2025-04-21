@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ScrollView, Text, StyleSheet, View, Button, Pressable, useColorScheme } from 'react-native';
+import { ScrollView, Text, StyleSheet, View, Pressable, useColorScheme } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { FormInput, FormSelect, FormMulti } from '@/components/TextInput';
 import { useTheme } from '@/components/ThemeSet';
@@ -140,7 +140,8 @@ const NewItem = ({ navigation }: MenuProps) => {
         data: {
             status: '',
             date: '',
-            custom: ['', '']
+            custom: ['', ''],
+            weight: ''
         }
     })
 
@@ -161,7 +162,6 @@ const NewItem = ({ navigation }: MenuProps) => {
 
         try {
             await createItem(itemData.boxId, itemData.name, itemData.data);
-            console.log(itemData.boxId, itemData.name, itemData.data);
             BoxEvents.emitBoxesChanged();
             navigation.goBack();
         } catch (e) {
@@ -224,7 +224,13 @@ const NewItem = ({ navigation }: MenuProps) => {
                     />
                 </View>
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <FormInput label={'Weight'} placeholder={'300g'} width={1.2} />
+                    <FormInput 
+                        label={'Weight'}
+                        placeholder={'300g'}
+                        width={1.2}
+                        value={itemData.data.weight}
+                        onChange={(text) => updateField('data', { ...itemData.data, weight: text })}
+                    />
                     <Pressable style={styles.submit} onPress={handleSubmit}>
                         <Text style={styles.submitText}>Submit</Text>
                     </Pressable>

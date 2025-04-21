@@ -4,7 +4,7 @@ import { ThemeIcon } from '@/components/MyIcons';
 import { useTheme } from '@/components/ThemeSet';
 
 interface ThemeSelectorProps {
-    theme: 'purple' | 'blue' | 'pink' | 'yellow';
+    theme: 'purple' | 'blue' | 'pink' | 'yellow' | 'green' | 'mint' | 'lavander' | 'candy' | 'boba' | 'grape' | 'beige' | 'pastel' | 'icecream' | 'dirt' | 'neon' | 'water' | 'flame' | 'pine' | 'retro';
     color: string;
 }
 

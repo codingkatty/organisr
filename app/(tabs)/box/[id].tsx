@@ -1,7 +1,7 @@
-import { useLocalSearchParams, useFocusEffect } from 'expo-router';
-import { getBoxData, getBoxImage, getItems } from '@/utils/filesys'
+import { useLocalSearchParams, useFocusEffect, router } from 'expo-router';
+import { getBoxData, getBoxImage, getItems, deleteBox } from '@/utils/filesys'
 import { useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, View, Text, useColorScheme, Image, Pressable } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, useColorScheme, Image, Pressable, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { useTheme } from '@/components/ThemeSet';
 import { Item } from '@/components/ItemList';
@@ -11,6 +11,7 @@ import { BoxEvents } from '@/utils/events';
 interface ItemData {
     name: string;
     data?: any;
+    boxId?: string;
 }
 
 interface Item {
@@ -32,8 +33,16 @@ export default function BoxScreen() {
         setModalVisible(true);
     }
 
+    const handleDelete = async (id: string) => {
+        Alert.alert("Delete Box", "Are you sure you want to delete this box?", [
+            { text: "Cancel", style: "cancel" }, { text: "Delete", onPress: async () => {
+                deleteBox(id);
+                BoxEvents.emitBoxesChanged();
+                router.push("../");
+            }}])
+    }
+
     const loadBoxData = useCallback(async () => {
-        console.log('Loading box data for ID:', id);
         if (!id) return;
         
         try {
@@ -44,7 +53,6 @@ export default function BoxScreen() {
             setImage(imageUri || null);
             
             const itemsData = await getItems(id);
-            console.log('Loaded items:', itemsData?.length || 0);
             setItems(itemsData || []);
         } catch (error) {
             console.error('Error loading box data:', error);
@@ -56,7 +64,6 @@ export default function BoxScreen() {
             loadBoxData();
             
             const unsubscribe = BoxEvents.onBoxesChanged(() => {
-                console.log('Box changes detected, refreshing data');
                 loadBoxData();
             });
             
@@ -75,6 +82,7 @@ export default function BoxScreen() {
                 <Text style={{ fontFamily: "DigitalDisco", marginTop: 50, fontSize: 40, color: useColorScheme() === "dark" ? themeColors.main : "#000" }}>{boxData?.name}</Text>
             </ThemedView>
             <ScrollView>
+                {/* upper part, box information */}
                 <View style={styles.info}>
                     <Text style={styles.h2}>Description</Text>
                     <Text style={styles.text}>{boxData?.desc}</Text>
@@ -113,13 +121,14 @@ export default function BoxScreen() {
                     </View>
                 ) : null}
 
+                {/* items */}
                 <View style={[styles.info, { backgroundColor: themeColors.search, flexDirection: 'column' }]}>
                     <Text style={styles.h2}>Items</Text>
                     <View>
                         {items.length > 0 ? (
-                            items.map((item) => (
-                                <View style={styles.item}>
-                                    <Item name={item.name} key={item.name} onPress={() => handleItemPress(item)} />
+                            items.map((item, index) => (
+                                <View style={styles.item} key={`item${item.name}-${index}`}>
+                                    <Item name={item.name} onPress={() => handleItemPress(item)} />
                                 </View>
                             ))
                         ) : (
@@ -132,16 +141,16 @@ export default function BoxScreen() {
                         )}
                     </View>
                 </View>
-                
+
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     marginHorizontal: '5%',
                 }}>
-                    <Pressable style={styles.submit}>
+                    <Pressable style={styles.submit} onPress={() => router.push(`../edit/${id}`)}>
                         <Text style={styles.submitText}>Edit</Text>
                     </Pressable>
-                    <Pressable style={[styles.submit, { backgroundColor: '#d00000' }]}>
+                    <Pressable style={[styles.submit, { backgroundColor: '#d00000' }]} onPress={() => handleDelete(id as string)}>
                         <Text style={styles.submitText}>Delete</Text>
                     </Pressable>
                 </View>

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Text, useColorScheme } from 'react-native';
+import { ScrollView, StyleSheet, Text, useColorScheme } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { themes } from '@/utils/themes';
 import { ThemeSelector } from '@/components/ThemeColor';
@@ -18,7 +18,7 @@ export default function ThemeScreen() {
             <ScrollView>
                 <ThemedView style={styles.boxContainer}>
                     {Object.entries(themes).map((theme) => (
-                        <ThemeSelector key={theme[0]} theme={theme[0] as 'purple' | 'blue' | 'pink' | 'yellow'} color={theme[1].main} />
+                        <ThemeSelector key={theme[0]} theme={theme[0] as 'purple' | 'blue' | 'pink' | 'yellow' | 'green' | 'mint' | 'lavander' | 'candy' | 'boba' | 'grape' | 'beige' | 'pastel' | 'icecream' | 'dirt' | 'neon' | 'water' | 'flame' | 'pine' | 'retro'} color={theme[1].main} />
                     ))}
                 </ThemedView>
             </ScrollView>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         marginVertical: 16,
         backgroundColor: 'transparent',
+        marginBottom: 100
     },
     boxWrapper: {
         width: '45%',

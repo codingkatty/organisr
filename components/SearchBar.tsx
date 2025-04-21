@@ -1,5 +1,4 @@
 import { StyleSheet, Pressable, View } from 'react-native';
-import { useState } from 'react';
 import { Searchbar } from 'react-native-paper';
 import { FilterIcon, NewIcon } from './MyIcons'
 import { useTheme } from '@/components/ThemeSet';

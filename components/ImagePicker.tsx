@@ -31,6 +31,10 @@ export const ImagePick = ({ value, onChange }: ImagePickProps) => {
         })();
     }, []);
 
+    useEffect(() => {
+        setImage(value);
+    }, [value]);
+
     const pickImage = async () => {
         if (!status?.granted) {
             const { status } = await requestPermission();
@@ -75,7 +79,6 @@ export const ImagePick = ({ value, onChange }: ImagePickProps) => {
             if (result && !result.canceled) {
                 const selectedUri = result.assets[0].uri;
                 setImage(selectedUri);
-                console.log(selectedUri)
                 
                 if (onChange) {
                     onChange(selectedUri);
@@ -89,7 +92,7 @@ export const ImagePick = ({ value, onChange }: ImagePickProps) => {
             <Text style={styles.label}>Box Image</Text>
             <Pressable onPress={pickImage} style={[styles.button, { backgroundColor: themeColors.search }]}>
                 {!image && <Text style={styles.text}>Choose Image</Text>}
-                {image && <Image source={{ uri: image }} style={styles.image} />}
+                {image && <Image source={{ uri: value }} style={styles.image} />}
             </Pressable>
         </View>
     );

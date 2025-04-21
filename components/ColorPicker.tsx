@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import ColorPicker, { Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
+import { View, Text, StyleSheet } from 'react-native';
+import ColorPicker, { Swatches, Preview} from 'reanimated-color-picker';
 import { useTheme } from '@/components/ThemeSet';
 
 interface ColorPickProps {
@@ -13,14 +12,13 @@ export const ColorPick = ({ value, onChange }: ColorPickProps) => {
 
     const onSelectColor = ({ hex }: { hex: string }) => {
         'worklet';
-        console.log(hex);
         onChange(hex);
     };
 
     return (
         <View>
             <Text style={styles.label}>Color Tag</Text>
-            <ColorPicker style={{ width: '70%' }} value='#d00000' onComplete={onSelectColor}>
+            <ColorPicker style={{ width: '70%' }} value={value} onComplete={onSelectColor}>
                 <View style={[styles.field, { backgroundColor: themeColors.search }]}>
                     <View style={styles.preview}>
                         <Preview hideInitialColor={true} hideText={true} style={styles.prev} />

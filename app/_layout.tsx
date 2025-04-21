@@ -26,7 +26,6 @@ export default function RootLayout() {
     async function lockOrientation() {
       try {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-        console.log('portrait!');
       } catch (error) {
         console.error('error:', error);
       }

@@ -2,6 +2,8 @@
 
 <img src="assets/images/screenshots/home.jpg" height="250px"><img src="assets/images/screenshots/new_box.jpg" height="250px"><img src="assets/images/screenshots/box.jpg" height="250px"><img src="assets/images/screenshots/search.jpg" height="250px"><img src="assets/images/screenshots/themes.jpg" height="250px">
 
+> all screenshots above are taken in pink theme, dark mode!!
+
 ## Concept
 Organisr is an elegant way to take notes for storage. It would be extremely useful for those with a lot of items, specifically small ones. The app allows users to create 'boxes' which represent real life storage containers and add their items. Then, when they want to search for a specific item, they can use the search function to find the location of the item.
 
@@ -16,18 +18,22 @@ I thought that it would be really useful to have an app dedicated to storage not
 
 Thinking practically though, there will be some issues, for example, many items would take a long time to add (btw users can snap a pic of the box and attach it too >w<), in which I will try my best to find a solution!
 
+## Demo
+You can see a demo posted on youtube [here](https://youtu.be/AfYpWXyIBY8?si=u_HICcAAjHHK9sSj)!<br>
+The demo is recorded in purple theme, dark mode featuring most features of the app :D
+
 ## Pages (5)
 ### Home <img src="assets/images/home.svg" width="20px">
 The home page consists of a grid like list of all boxes, with a default starter box! Clicking on a box will bring it to a box viewer/info page where the information of the box and included items can be seen.
 
 ### Search <img src="assets/images/search.svg" width="20px">
-This page has a search bar and returns lists of boxes and items from search. They are displayed in a collapsible, separated by box. It is for easy searching. I will add more advanced functions to assist search in the future!
+This page has a search bar and returns lists of items from search. They are displayed in a collapsible, separated by box. It is for easy searching. I will add more advanced functions to assist search in the future! A popup of information will show up when an item is clicked. Users can easily move items in the popup to other boxes.
 
 ### Add <img src="assets/images/add-icon.svg" width="20px">
-The add page is used to create boxes and add new items. Two buttons navigate to respective forms. It took quite some time though, as it uses some modules like dropdown, images and more.
+The add page is used to create boxes and add new items. Two buttons navigate to respective forms. It took quite some time though, as it uses some modules like dropdown, images and more. There are many field and options to customize your box or item.
 
 ### Themes <img src="assets/images/theme.svg" width="20px">
-The themes page can be used to change themes, which I would also add more in the future. Choose from a list of beautiful themes and make it feel like home! Other than that, the main theme for the whole app is pixel, icons are in svg for easy editing.
+The themes page can be used to change themes, which I would also add more in the future. Choose from a list of beautiful themes and make it feel like home! All of the themes are beautifully crafted and reflect different personalities. (My personal fav is pink!) Other than that, the main theme for the whole app is pixel, icons are in svg for easy editing.
 
 ### Box Viewer
 This page is not shown in nav bar as it is hidden. It can be opened from home page by clicking on a box! It opens the page containing information of the box as well as a list of items stored in the box. From there, users can edit/delete the box, as well as move items to other boxes.
@@ -66,6 +72,9 @@ This page is not shown in nav bar as it is hidden. It can be opened from home pa
 - [ ] filter for easy search
 - [ ] item editing
 - [ ] more fields
+- [ ] bulk actions
+
+<br>
 
 ## Developement
 After you fork and clone the repository... (from original README)
@@ -123,7 +132,7 @@ We've used many resources from the internet to create this project. Here's a lis
 ### Tools
 - Vscode
 - Figma
-- Hackatime
+- Hackatime (code: `~38hrs`, figma: `~2hrs`, as of 21/4/2025)
 - [svg to jsx](https://react-svgr.com/playground/?native=true)
 
 ## Icons
@@ -134,6 +143,8 @@ I made some icons using figma for the project, here are some! (home/search/add/t
 ### Contact
 if you encounter any bugs or so, please feel free to open an issue or email me at m001720@permatapintar.ukm.edu.my<br>
 hope you liked the idea of the app!! -candy
+
+made with <3 by candy (2025)
 
 <br>
 

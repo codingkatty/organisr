@@ -100,28 +100,6 @@ In the output, you'll find options to open the app in a
 
 > Web will not work, as some functions cannot be used. If you encounter issues opening project in Expo Go, use `npx expo start --tunnel` instead.
 
-### reanimated-color-picker
-I messed around and couldn't figure out how to edit some styles for the swatch, so I've edited `style.ts` (starts line 93) in `node_modules\reanimated-color-picker\lib\src`. Code here:
-
-```
-// Swatches
-swatchesContainer: {
-   flexDirection: 'row',
-   flexWrap: 'wrap',
-   justifyContent: 'space-between',
-},
-swatch: {
-   width: 30,
-   height: 30,
-   borderRadius: 5,
-   marginHorizontal: 5,
-   borderStyle: 'solid',
-   borderWidth: 1,
-},
-```
-
-the edted style is to match the overall theme <3
-
 ## Credits
 We've used many resources from the internet to create this project. Here's a list of them!
 

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import ColorPicker, { Swatches, Preview} from 'reanimated-color-picker';
+import ColorPicker, { Swatches, Preview } from '@candyisacat/reanimated-color-picker';
 import { useTheme } from '@/components/ThemeSet';
 
 interface ColorPickProps {

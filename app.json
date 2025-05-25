@@ -11,7 +11,6 @@
     "githubUrl": "https://github.com/codingkatty/organisr",
     "ios": {
       "supportsTablet": true,
-      "requiresFullScreen": true,
       "infoPlist": {
         "UISupportedInterfaceOrientations~ipad": [
           "UIInterfaceOrientationPortrait",

@@ -96,6 +96,7 @@ export const init = async () => {
 
 // work darn work!!!!
 export const getBoxes = async () => {
+    init();
     try {
         const dir = await FileSystem.readDirectoryAsync(uri + "boxes");
         const boxes = await Promise.all(
